@@ -38,6 +38,9 @@ ion-card{
 		color:gray !important;
 	}
 }
+ion-spinner * {
+	stroke: white !important;
+}
 .bg{
 	height: 15rem;
 	background: $primary;
