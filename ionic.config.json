@@ -1,5 +1,11 @@
 {
-  "name": "go",
-  "integrations": {},
-  "type": "ionic-angular"
+	"name": "go",
+	"integrations": {},
+	"type": "ionic-angular",
+	"proxies": [
+		{
+			"path": "/rpc",
+			"proxyUrl": "https://aip.baidubce.com/rpc"
+		}
+	]
 }
