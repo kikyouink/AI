@@ -1,6 +1,13 @@
 page-ai {
-	ion-card-content div{
+	.text{
 		padding: 2rem 0;
 		font-size: 3rem !important;
+	}
+	.mix{
+		position: relative;
+		overflow: hidden;
+	}
+	canvas{
+		z-index: 999;
 	}
 }

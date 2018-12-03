@@ -4,9 +4,9 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { HttpClientModule } from '@angular/common/http';
+import { ComponentsModule } from '../components/components.module';
 
 import { MyApp } from './app.component';
-import { HighlightProvider } from '../providers/highlight';
 
 @NgModule({
   declarations: [
@@ -15,6 +15,7 @@ import { HighlightProvider } from '../providers/highlight';
   imports: [
 	BrowserModule,
 	HttpClientModule,
+	ComponentsModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -25,7 +26,6 @@ import { HighlightProvider } from '../providers/highlight';
     StatusBar,
 	SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    HighlightProvider
   ]
 })
 export class AppModule {}
