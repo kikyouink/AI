@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 // import VConsole from 'vconsole';
 @Component({
-	templateUrl: 'app.html'
+	templateUrl: 'app.html',
+	animations: [
+	]
 })
 export class MyApp {
 	rootPage: any = 'TabsPage';

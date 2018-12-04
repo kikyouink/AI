@@ -4,7 +4,7 @@
 		<button ion-button menuToggle>
 			<ion-icon name="menu"></ion-icon>
 		</button>
-		<ion-title>Book</ion-title>
+		<ion-title>AI</ion-title>
 	</ion-navbar>
 
 </ion-header>
@@ -13,17 +13,19 @@
 
 	<ion-card>
 		<ion-card-content>
-			<div class="text" contenteditable="true" text-center #text>出牌阶段限一次，你可以摸一张牌</div>
-			<div class="mix" #mix >
-				<canvas #canvas height="80"></canvas>
-				<button ion-button round small #part *ngFor="let item of list" [attr.data-postag]="item.postag" [attr.data-head]="item.head" [attr.data-id]="item.id" [attr.data-deprel]="item.deprel">
-					{{item.word}}{{item.deprel}}
-				</button>
+			<div class="text" contenteditable="true" text-center #text>当你受到伤害后，你可以摸两张牌</div>
+			<div class="mix" #mix [hidden]="!received" [@fade]="received?'show':'hide'">
+				<canvas #canvas></canvas>
+				<div class="buttons" #btnBox>
+					<button ion-button round small #button *ngFor="let item of passages" (click)="skip(item.head)" [color]="item.head==0?'danger':'primary'" [attr.data-postag]="item.postag" [attr.data-head]="item.head" [attr.data-id]="item.id" [attr.data-deprel]="item.deprel">
+						{{item.word}}{{item.deprel}}
+					</button>
+				</div>
 			</div>
 		</ion-card-content>
 	</ion-card>
 
-	<button ion-button (click)="post(text)" full round>
+	<button ion-button (click)="getData()" full round>
 		<span *ngIf="!loading">发送</span>
 		<ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
 	</button>
