@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
+import {ViewAsProvider} from '../view-as/view-as'
+import {SentenceProvider} from "../sentence/sentence"
 /*
   Generated class for the CodeProvider provider.
 
@@ -9,12 +9,44 @@ import { Injectable } from '@angular/core';
 */
 @Injectable()
 export class CodeProvider {
+	constructor(
+		public viewAs:ViewAsProvider,
+		public sentence:SentenceProvider,
+	) {}
 
-	constructor(public http: HttpClient) {
-		console.log('Hello CodeProvider Provider');
-	}
-	create() {
+	create(json) {
 		console.log('coding...');
+		var type = this.judgeType(json);
+		switch (type) {
+			case "viewAs": this.viewAs.start(); break;
+			// case "enable": this.enable.compile(json); break;
+			// case "trigger": this.trigger.compile(json); break;
+			default: this.quit();
+		}
 	}
+	getPassages() {
+
+	}
+	judgeType(json) {
+		return this.judgeViewAs(json)?"viewAs":this.judgeEnable(json)?"enable":this.judgeTrigger(json)?"trigger":this.quit();
+
+	}
+	judgeViewAs(json){
+		var BA = json.some((i) => {
+			return i.deprel == "BA"
+		});
+		var HED = this.sentence.findHED();
+		if (BA && HED.postag == 'v') return true;
+	}
+	judgeEnable(json){
+		return false;
+	}
+	judgeTrigger(json){
+		return false;
+	}
+	quit() {
+
+	}
+
 
 }

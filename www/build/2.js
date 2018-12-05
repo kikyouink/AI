@@ -49,6 +49,7 @@ var AiPageModule = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_painter_painter__ = __webpack_require__(198);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_http_http__ = __webpack_require__(199);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_code_code__ = __webpack_require__(200);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_sentence_sentence__ = __webpack_require__(286);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -64,13 +65,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var AiPage = /** @class */ (function () {
-    function AiPage(navCtrl, navParams, http, painter, code) {
+    function AiPage(navCtrl, navParams, http, painter, code, sentence) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.http = http;
         this.painter = painter;
         this.code = code;
+        this.sentence = sentence;
         this.loading = false;
         this.received = false;
     }
@@ -78,7 +81,6 @@ var AiPage = /** @class */ (function () {
         this.canvas = this.canvasE.nativeElement;
         this.mix = this.mixE.nativeElement;
         this.btnBox = this.btnBoxE.nativeElement;
-        console.log('ionViewDidLoad AiPage');
     };
     AiPage.prototype.e = function (i) {
         return i._elementRef.nativeElement;
@@ -86,23 +88,24 @@ var AiPage = /** @class */ (function () {
     AiPage.prototype.getData = function () {
         var _this = this;
         var msg = this.text.nativeElement.textContent;
+        msg = this.sentence.replaceCardName(msg);
         this.loading = true;
         this.painter.clear(this.canvas);
         this.text.nativeElement.blur();
         this.http.post(msg).subscribe(function (data) {
             console.log(data);
-            _this.passages = data["items"];
+            _this.paragraph = data["items"];
             _this.loading = false;
             _this.received = true;
-            _this.handleData();
+            _this.handleData(data["items"]);
+            _this.sentence.receiveJson(data["items"]);
         });
     };
-    AiPage.prototype.handleData = function () {
+    AiPage.prototype.handleData = function (data) {
         var _this = this;
         setTimeout(function () {
             var result = _this.buttons._results;
-            console.log(result);
-            _this.painter.resize(_this.canvas, _this.btnBox);
+            _this.painter.resize(_this.canvas, _this.mix);
             result.map(function (i) {
                 var child = _this.e(i);
                 if (child.dataset.head != 0) {
@@ -110,11 +113,10 @@ var AiPage = /** @class */ (function () {
                     var start = _this.getPoint(child);
                     var end = _this.getPoint(parent);
                     var center = (start + end) / 2;
-                    console.log('start:' + start + '中点' + center + 'end' + end);
                     _this.painter.draw(_this.canvas, start, center, end);
                 }
             });
-            _this.code.create();
+            _this.code.create(data);
         }, 100);
     };
     AiPage.prototype.skip = function (head) {
@@ -136,7 +138,6 @@ var AiPage = /** @class */ (function () {
         var left = button.offsetLeft;
         var width = button.offsetWidth;
         var centerPoint = left + width / 2;
-        console.log(left + width);
         return centerPoint;
     };
     __decorate([
@@ -161,7 +162,7 @@ var AiPage = /** @class */ (function () {
     ], AiPage.prototype, "buttons", void 0);
     AiPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-ai',template:/*ion-inline-start:"C:\Users\Linka\Desktop\teach\go\src\pages\ai\ai.html"*/'<ion-header>\n\n	<ion-navbar>\n		<button ion-button menuToggle>\n			<ion-icon name="menu"></ion-icon>\n		</button>\n		<ion-title>AI</ion-title>\n	</ion-navbar>\n\n</ion-header>\n\n<ion-content padding>\n\n	<ion-card>\n		<ion-card-content>\n			<div class="text" contenteditable="true" text-center #text>当你受到伤害后，你可以摸两张牌</div>\n			<div class="mix" #mix [hidden]="!received" [@fade]="received?\'show\':\'hide\'">\n				<canvas #canvas></canvas>\n				<div class="buttons" #btnBox>\n					<button ion-button round small #button *ngFor="let item of passages" (click)="skip(item.head)" [color]="item.head==0?\'danger\':\'primary\'" [attr.data-postag]="item.postag" [attr.data-head]="item.head" [attr.data-id]="item.id" [attr.data-deprel]="item.deprel">\n						{{item.word}}{{item.deprel}}\n					</button>\n				</div>\n			</div>\n		</ion-card-content>\n	</ion-card>\n\n	<button ion-button (click)="getData()" full round>\n		<span *ngIf="!loading">发送</span>\n		<ion-spinner *ngIf="loading" name="crescent"></ion-spinner>\n	</button>\n\n</ion-content>'/*ion-inline-end:"C:\Users\Linka\Desktop\teach\go\src\pages\ai\ai.html"*/,
+            selector: 'page-ai',template:/*ion-inline-start:"C:\Users\Linka\Desktop\teach\go\src\pages\ai\ai.html"*/'<ion-header>\n\n	<ion-navbar>\n		<button ion-button menuToggle>\n			<ion-icon name="menu"></ion-icon>\n		</button>\n		<ion-title>AI</ion-title>\n	</ion-navbar>\n\n</ion-header>\n\n<ion-content padding>\n\n	<ion-card>\n		<ion-card-content>\n			<div class="text" contenteditable="true" text-center #text>你可以将一张梅花牌当【杀】使用或打出</div>\n			<div class="mix" #mix [hidden]="!received" [@fade]="received?\'show\':\'hide\'">\n				<canvas #canvas></canvas>\n				<div class="buttons" #btnBox>\n					<button ion-button round small #button *ngFor="let item of paragraph" (click)="skip(item.head)" [color]="item.head==0?\'danger\':\'primary\'" [attr.data-postag]="item.postag" [attr.data-head]="item.head" [attr.data-id]="item.id" [attr.data-deprel]="item.deprel">\n						{{item.word}}\n						<ion-badge color="danger">{{item.deprel}}</ion-badge>\n					</button>\n				</div>\n			</div>\n		</ion-card-content>\n	</ion-card>\n\n	<button ion-button (click)="getData()" full round>\n		<span *ngIf="!loading">发送</span>\n		<ion-spinner *ngIf="loading" name="crescent"></ion-spinner>\n	</button>\n\n</ion-content>'/*ion-inline-end:"C:\Users\Linka\Desktop\teach\go\src\pages\ai\ai.html"*/,
             animations: [
                 Object(__WEBPACK_IMPORTED_MODULE_1__angular_animations__["j" /* trigger */])('fade', [
                     Object(__WEBPACK_IMPORTED_MODULE_1__angular_animations__["g" /* state */])('show', Object(__WEBPACK_IMPORTED_MODULE_1__angular_animations__["h" /* style */])({
@@ -178,10 +179,10 @@ var AiPage = /** @class */ (function () {
                 ])
             ],
         }),
-        __metadata("design:paramtypes", [typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* NavController */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* NavParams */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_4__providers_http_http__["a" /* HttpProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__providers_http_http__["a" /* HttpProvider */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_3__providers_painter_painter__["a" /* PainterProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_painter_painter__["a" /* PainterProvider */]) === "function" && _h || Object, typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_5__providers_code_code__["a" /* CodeProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__providers_code_code__["a" /* CodeProvider */]) === "function" && _j || Object])
+        __metadata("design:paramtypes", [typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* NavController */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* NavParams */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_4__providers_http_http__["a" /* HttpProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__providers_http_http__["a" /* HttpProvider */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_3__providers_painter_painter__["a" /* PainterProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_painter_painter__["a" /* PainterProvider */]) === "function" && _h || Object, typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_5__providers_code_code__["a" /* CodeProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__providers_code_code__["a" /* CodeProvider */]) === "function" && _j || Object, typeof (_k = typeof __WEBPACK_IMPORTED_MODULE_6__providers_sentence_sentence__["a" /* SentenceProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__providers_sentence_sentence__["a" /* SentenceProvider */]) === "function" && _k || Object])
     ], AiPage);
     return AiPage;
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
 }());
 
 //# sourceMappingURL=ai.js.map

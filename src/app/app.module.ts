@@ -10,6 +10,8 @@ import { MyApp } from './app.component';
 import { PainterProvider } from '../providers/painter/painter';
 import { HttpProvider } from '../providers/http/http';
 import { CodeProvider } from '../providers/code/code';
+import { ViewAsProvider } from '../providers/view-as/view-as';
+import { SentenceProvider } from '../providers/sentence/sentence';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,8 @@ import { CodeProvider } from '../providers/code/code';
     PainterProvider,
     HttpProvider,
     CodeProvider,
+    ViewAsProvider,
+    SentenceProvider,
   ]
 })
 export class AppModule {}

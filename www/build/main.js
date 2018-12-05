@@ -88,17 +88,16 @@ var PainterProvider = /** @class */ (function () {
     };
     PainterProvider.prototype.draw = function (canvas, x1, x2, x3) {
         var y1, y2, y3;
-        y1 = y3 = 60;
+        y1 = y3 = 80;
         var dire;
         var ctx = canvas.getContext("2d");
-        ctx.beginPath();
         if (x2 < x3) {
             y2 = 0;
             dire = "right";
             ctx.strokeStyle = "#488aff";
         }
         else {
-            y2 = 120;
+            y2 = 160;
             dire = "left";
             ctx.strokeStyle = "#ff4848";
         }
@@ -117,11 +116,11 @@ var PainterProvider = /** @class */ (function () {
             x = x2 - 10;
             top = {
                 x: x,
-                y: 35,
+                y: 45,
             };
             bottom = {
                 x: x,
-                y: 25,
+                y: 35,
             };
             ctx.strokeStyle = "#488aff";
         }
@@ -129,11 +128,11 @@ var PainterProvider = /** @class */ (function () {
             x = x2 + 10;
             top = {
                 x: x,
-                y: 85,
+                y: 115,
             };
             bottom = {
                 x: x,
-                y: 95,
+                y: 125,
             };
             ctx.strokeStyle = "#ff4848";
         }
@@ -144,9 +143,10 @@ var PainterProvider = /** @class */ (function () {
     };
     PainterProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */]) === "function" && _a || Object])
     ], PainterProvider);
     return PainterProvider;
+    var _a;
 }());
 
 //# sourceMappingURL=painter.js.map
@@ -217,8 +217,9 @@ var HttpProvider = /** @class */ (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CodeProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_as_view_as__ = __webpack_require__(285);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__sentence_sentence__ = __webpack_require__(286);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -230,6 +231,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 /*
   Generated class for the CodeProvider provider.
 
@@ -237,18 +239,49 @@ var __metadata = (this && this.__metadata) || function (k, v) {
   and Angular DI.
 */
 var CodeProvider = /** @class */ (function () {
-    function CodeProvider(http) {
-        this.http = http;
-        console.log('Hello CodeProvider Provider');
+    function CodeProvider(viewAs, sentence) {
+        this.viewAs = viewAs;
+        this.sentence = sentence;
     }
-    CodeProvider.prototype.create = function () {
+    CodeProvider.prototype.create = function (json) {
         console.log('coding...');
+        var type = this.judgeType(json);
+        switch (type) {
+            case "viewAs":
+                this.viewAs.start();
+                break;
+            // case "enable": this.enable.compile(json); break;
+            // case "trigger": this.trigger.compile(json); break;
+            default: this.quit();
+        }
+    };
+    CodeProvider.prototype.getPassages = function () {
+    };
+    CodeProvider.prototype.judgeType = function (json) {
+        return this.judgeViewAs(json) ? "viewAs" : this.judgeEnable(json) ? "enable" : this.judgeTrigger(json) ? "trigger" : this.quit();
+    };
+    CodeProvider.prototype.judgeViewAs = function (json) {
+        var BA = json.some(function (i) {
+            return i.deprel == "BA";
+        });
+        var HED = this.sentence.findHED();
+        if (BA && HED.postag == 'v')
+            return true;
+    };
+    CodeProvider.prototype.judgeEnable = function (json) {
+        return false;
+    };
+    CodeProvider.prototype.judgeTrigger = function (json) {
+        return false;
+    };
+    CodeProvider.prototype.quit = function () {
     };
     CodeProvider = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */]])
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__view_as_view_as__["a" /* ViewAsProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__view_as_view_as__["a" /* ViewAsProvider */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__sentence_sentence__["a" /* SentenceProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__sentence_sentence__["a" /* SentenceProvider */]) === "function" && _b || Object])
     ], CodeProvider);
     return CodeProvider;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=code.js.map
@@ -285,12 +318,16 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_painter_painter__ = __webpack_require__(198);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_http_http__ = __webpack_require__(199);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_code_code__ = __webpack_require__(200);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_view_as_view_as__ = __webpack_require__(285);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_sentence_sentence__ = __webpack_require__(286);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -333,6 +370,8 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_8__providers_painter_painter__["a" /* PainterProvider */],
                 __WEBPACK_IMPORTED_MODULE_9__providers_http_http__["a" /* HttpProvider */],
                 __WEBPACK_IMPORTED_MODULE_10__providers_code_code__["a" /* CodeProvider */],
+                __WEBPACK_IMPORTED_MODULE_11__providers_view_as_view_as__["a" /* ViewAsProvider */],
+                __WEBPACK_IMPORTED_MODULE_12__providers_sentence_sentence__["a" /* SentenceProvider */],
             ]
         })
     ], AppModule);
@@ -413,6 +452,197 @@ var MyApp = /** @class */ (function () {
 }());
 
 //# sourceMappingURL=app.component.js.map
+
+/***/ }),
+
+/***/ 285:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ViewAsProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sentence_sentence__ = __webpack_require__(286);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var ViewAsProvider = /** @class */ (function () {
+    function ViewAsProvider(sentence) {
+        this.sentence = sentence;
+    }
+    ViewAsProvider.prototype.getWhen = function () {
+        var when;
+        var HED = this.sentence.findHED();
+        var when1 = this.sentence.findChildren(HED, "VV")[0];
+        var when2 = this.sentence.findSibling(when1);
+        if (!when2)
+            when = this.sentence.translate(when1.word);
+        else {
+            var arr = [];
+            arr.push(this.sentence.translate(when1.word));
+            arr.push(this.sentence.translate(when2.word));
+            when = arr;
+        }
+        console.log(when);
+        return when;
+    };
+    ViewAsProvider.prototype.getFilterCard = function () {
+        var filterCard;
+    };
+    ViewAsProvider.prototype.getPosition = function () {
+    };
+    ViewAsProvider.prototype.getViewAs = function () {
+    };
+    ViewAsProvider.prototype.getPrompt = function () {
+    };
+    ViewAsProvider.prototype.compile = function () {
+    };
+    //视为技
+    ViewAsProvider.prototype.start = function () {
+        console.log('开始编写视为技');
+        this.getWhen();
+        this.getFilterCard();
+        this.getPosition();
+        this.getViewAs();
+        this.getPrompt();
+    };
+    ViewAsProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__sentence_sentence__["a" /* SentenceProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__sentence_sentence__["a" /* SentenceProvider */]) === "function" && _a || Object])
+    ], ViewAsProvider);
+    return ViewAsProvider;
+    var _a;
+}());
+
+//# sourceMappingURL=view-as.js.map
+
+/***/ }),
+
+/***/ 286:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SentenceProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var SentenceProvider = /** @class */ (function () {
+    function SentenceProvider() {
+        this.translation = {
+            "使用": 'chooseToUse',
+            "打出": "chooseToRespond",
+            "红色": 'red',
+            "黑色": 'black',
+            "梅花": 'club',
+            "方块": 'diamond',
+            "红桃": 'heart',
+            "黑桃": 'spade'
+        };
+        this.replaceList = [
+            {
+                // reg:'/【[\u4e00-\u9fa5]+】/g',
+                reg: "【[\u4e00-\u9fa5]+】",
+                replacement: 'X',
+            }, {
+                reg: "梅花",
+                replacement: '草花',
+            }
+        ];
+    }
+    SentenceProvider.prototype.replaceCardName = function (msg) {
+        var newMsg = msg;
+        var i = this.replaceList.length;
+        while (i--) {
+            var k = this.replaceList[i];
+            console.log(k);
+            newMsg = newMsg.replace(new RegExp(k.reg, "g"), k.replacement);
+        }
+        console.log(newMsg);
+        return newMsg;
+    };
+    SentenceProvider.prototype.receiveJson = function (json) {
+        this.json = json;
+    };
+    SentenceProvider.prototype.translate = function (word) {
+        for (var i in this.translation) {
+            if (i == word)
+                return this.translation[i];
+        }
+    };
+    //判断类型
+    SentenceProvider.prototype.findHED = function () {
+        var HED = this.json.filter(function (i) {
+            return i.head == 0;
+        });
+        console.log(HED[0]);
+        return HED[0];
+    };
+    SentenceProvider.prototype.findParent = function (item) {
+        var parent = this.json.filter(function (i) {
+            return i.id == item.head;
+        });
+        console.log(parent[0]);
+        return parent[0];
+    };
+    SentenceProvider.prototype.findChildren = function (item, deprel) {
+        var num, result = this.json;
+        if (!deprel) {
+            var children = result.filter(function (i) {
+                return i.head == item.id;
+            });
+        }
+        else {
+            if (typeof deprel == "string")
+                num = 1;
+            else if (Array.isArray(deprel))
+                num = deprel.length;
+            while (num--) {
+                var children = result.filter(function (i) {
+                    return i.head == item.id && i.deprel == deprel;
+                });
+                result = children;
+            }
+        }
+        console.log(children);
+        return children;
+    };
+    SentenceProvider.prototype.findSibling = function (item) {
+        var sibling = this.findChildren(item).filter(function (i) {
+            return i.deprel == "COO";
+        });
+        console.log(sibling[0]);
+        return sibling[0];
+    };
+    SentenceProvider.prototype.findDeprel = function (array, deprel) {
+        var result = array.filter(function (i) {
+            return i.deprel == deprel;
+        });
+        console.log(result);
+        return result;
+    };
+    SentenceProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [])
+    ], SentenceProvider);
+    return SentenceProvider;
+}());
+
+//# sourceMappingURL=sentence.js.map
 
 /***/ })
 

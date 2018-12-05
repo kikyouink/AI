@@ -6,7 +6,7 @@ page-ai {
 	.mix{
 		position: relative;
 		overflow: auto hidden;
-		height: 120px;
+		height: 160px;
 	}
 	canvas{
 		position: absolute;
@@ -19,7 +19,7 @@ page-ai {
 		justify-content: flex-start;
 		align-items: center;
 		width: fit-content;
-		height: 120px;
+		height: 100%;
 		overflow: auto;
 	}
 }

@@ -25,6 +25,11 @@ ion-card{
 ion-spinner * {
 	stroke: white !important;
 }
+ion-badge{
+	background: $twitter !important;
+	border-radius: 10px !important;
+	padding: 3px 5px !important;
+}
 .bg{
 	height: 15rem;
 	background: $primary;

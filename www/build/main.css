@@ -25707,6 +25707,12 @@ ion-spinner * {
   stroke: white !important;
 }
 
+ion-badge {
+  background: #3c67b3 !important;
+  border-radius: 10px !important;
+  padding: 3px 5px !important;
+}
+
 .bg {
   height: 15rem;
   background: #488aff;
@@ -25720,7 +25726,7 @@ page-ai .text {
 page-ai .mix {
   position: relative;
   overflow: auto hidden;
-  height: 120px;
+  height: 160px;
 }
 
 page-ai canvas {
@@ -25745,6 +25751,6 @@ page-ai .buttons {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-  height: 120px;
+  height: 100%;
   overflow: auto;
 }

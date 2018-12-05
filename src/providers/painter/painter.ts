@@ -21,17 +21,16 @@ export class PainterProvider {
 	}
 	draw(canvas, x1, x2, x3) {
 		var y1, y2, y3;
-		y1 = y3 = 60;
+		y1 = y3 = 80;
 		var dire;
 		var ctx = canvas.getContext("2d");
-		ctx.beginPath();
 		if (x2 < x3) {
 			y2 = 0;
 			dire = "right";
 			ctx.strokeStyle = "#488aff";
 		}
 		else {
-			y2 = 120;
+			y2 = 160;
 			dire = "left";
 			ctx.strokeStyle = "#ff4848";
 		}
@@ -50,11 +49,11 @@ export class PainterProvider {
 			x = x2 - 10;
 			top = {
 				x: x,
-				y: 35,
+				y: 45,
 			}
 			bottom = {
 				x: x,
-				y: 25,
+				y: 35,
 			}
 			ctx.strokeStyle = "#488aff";
 		}
@@ -62,11 +61,11 @@ export class PainterProvider {
 			x = x2 + 10;
 			top = {
 				x: x,
-				y: 85,
+				y: 115,
 			}
 			bottom = {
 				x: x,
-				y: 95,
+				y: 125,
 			}
 			ctx.strokeStyle = "#ff4848";
 		}

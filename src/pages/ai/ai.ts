@@ -5,6 +5,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { PainterProvider } from "../../providers/painter/painter";
 import { HttpProvider } from "../../providers/http/http";
 import { CodeProvider } from "../../providers/code/code";
+import {SentenceProvider} from "../../providers/sentence/sentence"
 
 @IonicPage()
 @Component({
@@ -34,45 +35,46 @@ export class AiPage {
 	@ViewChildren('button') buttons: any;
 	loading: boolean = false;
 	received: boolean = false;
-	passages: any;
+	paragraph: any;
 	canvas: HTMLCanvasElement;
 	mix: HTMLDivElement;
-	btnBox:HTMLDivElement;
+	btnBox: HTMLDivElement;
 	constructor(
 		public navCtrl: NavController,
 		public navParams: NavParams,
 		public http: HttpProvider,
 		public painter: PainterProvider,
 		public code: CodeProvider,
+		public sentence:SentenceProvider,
 	) { }
 
 	ionViewDidLoad() {
 		this.canvas = this.canvasE.nativeElement;
 		this.mix = this.mixE.nativeElement;
 		this.btnBox = this.btnBoxE.nativeElement;
-		console.log('ionViewDidLoad AiPage');
 	}
 	e(i) {
 		return i._elementRef.nativeElement
 	}
 	getData() {
 		var msg = this.text.nativeElement.textContent;
+		msg = this.sentence.replaceCardName(msg);
 		this.loading = true;
 		this.painter.clear(this.canvas);
 		this.text.nativeElement.blur();
 		this.http.post(msg).subscribe(data => {
 			console.log(data);
-			this.passages = data["items"];
+			this.paragraph = data["items"];
 			this.loading = false;
 			this.received = true;
-			this.handleData();
+			this.handleData(data["items"]);
+			this.sentence.receiveJson(data["items"]);
 		})
 	}
-	handleData() {
+	handleData(data) {
 		setTimeout(() => {
 			var result = this.buttons._results;
-			console.log(result);
-			this.painter.resize(this.canvas, this.btnBox);
+			this.painter.resize(this.canvas, this.mix);
 			result.map((i) => {
 				var child = this.e(i);
 				if (child.dataset.head != 0) {
@@ -80,16 +82,15 @@ export class AiPage {
 					var start = this.getPoint(child);
 					var end = this.getPoint(parent);
 					var center = (start + end) / 2;
-					console.log('start:' + start + '中点' + center + 'end' + end);
 					this.painter.draw(this.canvas, start, center, end);
 				}
 			})
-			this.code.create();
+			this.code.create(data);
 		}, 100);
 	}
-	skip(head){
-		var parent=this.findParent(head);
-		if(parent) parent.scrollIntoView({
+	skip(head) {
+		var parent = this.findParent(head);
+		if (parent) parent.scrollIntoView({
 			behavior: "smooth"
 		});
 	}
@@ -98,13 +99,12 @@ export class AiPage {
 			var button = this.e(i);
 			return button.dataset.id == head;
 		});
-		return parent.length?this.e(parent[0]):null;
+		return parent.length ? this.e(parent[0]) : null;
 	}
 	getPoint(button) {
 		var left = button.offsetLeft;
 		var width = button.offsetWidth;
 		var centerPoint = left + width / 2;
-		console.log(left+width);
 		return centerPoint;
 	}
 
