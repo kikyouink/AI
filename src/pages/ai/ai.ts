@@ -74,7 +74,7 @@ export class AiPage {
 	handleData(data) {
 		setTimeout(() => {
 			var result = this.buttons._results;
-			this.painter.resize(this.canvas, this.mix);
+			this.painter.resize(this.canvas, this.btnBox);
 			result.map((i) => {
 				var child = this.e(i);
 				if (child.dataset.head != 0) {

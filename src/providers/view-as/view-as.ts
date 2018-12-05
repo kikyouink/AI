@@ -24,7 +24,10 @@ export class ViewAsProvider {
 	}
 	getFilterCard() {
 		var filterCard;
-		
+
+	}
+	getSelectCard(){
+
 	}
 	getPosition() {
 
