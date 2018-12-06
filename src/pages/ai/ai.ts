@@ -1,11 +1,13 @@
-
-import { Component, ViewChild, ViewChildren, ElementRef, QueryList } from '@angular/core';
+import { Component, ViewChild, ViewChildren, ElementRef } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { PainterProvider } from "../../providers/painter/painter";
 import { HttpProvider } from "../../providers/http/http";
 import { CodeProvider } from "../../providers/code/code";
-import {SentenceProvider} from "../../providers/sentence/sentence"
+import { SentenceProvider } from "../../providers/sentence/sentence"
+import { KnowledgeProvider } from "../../providers/knowledge/knowledge"
+import { RxjsProvider } from "../../providers/rxjs/rxjs";
+import { ToastController } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -45,8 +47,18 @@ export class AiPage {
 		public http: HttpProvider,
 		public painter: PainterProvider,
 		public code: CodeProvider,
-		public sentence:SentenceProvider,
-	) { }
+		public sentence: SentenceProvider,
+		public knowledge: KnowledgeProvider,
+		public rxjs: RxjsProvider,
+		public toastCtrl: ToastController,
+
+	) {
+		this.rxjs
+			.getMessage().subscribe(message => {
+				console.log(message.text);
+				this.presentToast(message.text)
+			});
+	}
 
 	ionViewDidLoad() {
 		this.canvas = this.canvasE.nativeElement;
@@ -57,14 +69,18 @@ export class AiPage {
 		return i._elementRef.nativeElement
 	}
 	getData() {
+		console.clear();
 		var msg = this.text.nativeElement.textContent;
-		msg = this.sentence.replaceCardName(msg);
+		msg = this.knowledge.getReplace(msg);
 		this.loading = true;
 		this.painter.clear(this.canvas);
 		this.text.nativeElement.blur();
 		this.http.post(msg).subscribe(data => {
 			console.log(data);
-			this.paragraph = data["items"];
+			var p=this.deepCopy(data["items"]);
+			console.log(p)
+			// this.paragraph = this.knowledge.getRestore(p);
+			this.paragraph =data["items"];
 			this.loading = false;
 			this.received = true;
 			this.handleData(data["items"]);
@@ -106,6 +122,22 @@ export class AiPage {
 		var width = button.offsetWidth;
 		var centerPoint = left + width / 2;
 		return centerPoint;
+	}
+	deepCopy(source,bool=true){
+		var sourceCopy;
+		if(bool) sourceCopy = [];
+		else sourceCopy = {};
+		for (var item in source){
+			sourceCopy[item] = typeof source[item] === 'object' ? this.deepCopy(source[item],false) : source[item];
+		}
+		return sourceCopy;
+	}
+	presentToast(message) {
+		const toast = this.toastCtrl.create({
+			message: message,
+			duration: 3000
+		});
+		toast.present();
 	}
 
 }

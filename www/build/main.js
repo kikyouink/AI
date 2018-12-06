@@ -1,6 +1,45 @@
 webpackJsonp([3],{
 
-/***/ 113:
+/***/ 103:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RxjsProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+var RxjsProvider = /** @class */ (function () {
+    function RxjsProvider() {
+        this.subject = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["Subject"]();
+    }
+    RxjsProvider.prototype.sendMessage = function (message) {
+        this.subject.next({ text: message });
+    };
+    RxjsProvider.prototype.clearMessage = function () {
+        this.subject.next();
+    };
+    RxjsProvider.prototype.getMessage = function () {
+        return this.subject.asObservable();
+    };
+    RxjsProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])()
+    ], RxjsProvider);
+    return RxjsProvider;
+}());
+
+//# sourceMappingURL=rxjs.js.map
+
+/***/ }),
+
+/***/ 115:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -13,24 +52,24 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 113;
+webpackEmptyAsyncContext.id = 115;
 
 /***/ }),
 
-/***/ 155:
+/***/ 157:
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
 	"../pages/ai/ai.module": [
-		281,
+		283,
 		2
 	],
 	"../pages/book/book.module": [
-		282,
+		284,
 		1
 	],
 	"../pages/tabs/tabs.module": [
-		283,
+		285,
 		0
 	]
 };
@@ -45,18 +84,19 @@ function webpackAsyncContext(req) {
 webpackAsyncContext.keys = function webpackAsyncContextKeys() {
 	return Object.keys(map);
 };
-webpackAsyncContext.id = 155;
+webpackAsyncContext.id = 157;
 module.exports = webpackAsyncContext;
 
 /***/ }),
 
-/***/ 156:
+/***/ 158:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ViewAsProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sentence_sentence__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__knowledge_knowledge__ = __webpack_require__(50);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -68,34 +108,85 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 var ViewAsProvider = /** @class */ (function () {
-    function ViewAsProvider(sentence) {
+    function ViewAsProvider(sentence, knowledge) {
         this.sentence = sentence;
+        this.knowledge = knowledge;
     }
     ViewAsProvider.prototype.getWhen = function () {
         var when;
-        var HED = this.sentence.findHED();
-        var when1 = this.sentence.findChildren(HED, "VV")[0];
-        var when2 = this.sentence.findSibling(when1);
+        var HED = this.sentence.getHED()[0];
+        var when1 = this.sentence.getChildren(HED, "VV")[0];
+        var when2 = this.sentence.getSibling(when1)[0];
         if (!when2)
-            when = this.sentence.translate(when1.word);
+            when = this.knowledge.getTranslation(when1.word);
         else {
             var arr = [];
-            arr.push(this.sentence.translate(when1.word));
-            arr.push(this.sentence.translate(when2.word));
+            arr.push(this.knowledge.getTranslation(when1.word));
+            arr.push(this.knowledge.getTranslation(when2.word));
             when = arr;
         }
+        console.log('时机:');
         console.log(when);
         return when;
     };
     ViewAsProvider.prototype.getFilterCard = function () {
-        var filterCard;
+        var _this = this;
+        // debugger;
+        var main = "", filter = [];
+        var card = this.sentence.getFilter('BA', 'n')[0];
+        var ATT = this.sentence.getChildren(card, 'ATT', 'n');
+        ATT.map(function (i) {
+            var type = _this.knowledge.getType(i.word);
+            if (type == 'suit' || type == 'color') {
+                var value = _this.knowledge.getTranslation(i.word);
+                filter.push({
+                    type: type,
+                    value: value
+                });
+            }
+        });
+        var j = filter.length;
+        while (j--) {
+            var _a = [filter[j].type, filter[j].value], type = _a[0], value = _a[1];
+            main += "get." + type + "(card)=='" + value + "'";
+            if (j)
+                main += "&&";
+        }
+        main = "return " + main;
+        var filterCard = new Function("card", "player", main);
+        console.log('卡牌条件:');
+        console.log(filterCard);
+        return filterCard;
     };
     ViewAsProvider.prototype.getSelectCard = function () {
+        var num = this.sentence.getDeprel('QUN')[0].word;
+        var num2 = this.knowledge.getTranslation(num);
+        console.log('卡牌数量:');
+        console.log(num2);
+        return num2;
     };
     ViewAsProvider.prototype.getPosition = function () {
+        var _this = this;
+        var position;
+        var card = this.sentence.getFilter('BA', 'n')[0];
+        var ATT = this.sentence.getChildren(card, 'ATT', 'n');
+        ATT.map(function (i) {
+            var type = _this.knowledge.getType(i.word);
+            if (type == 'position') {
+                position = _this.knowledge.getTranslation(i.word);
+            }
+        });
+        if (!position)
+            position = "he";
+        console.log('卡牌区域:');
+        console.log(position);
+        return position;
     };
     ViewAsProvider.prototype.getViewAs = function () {
+        var HED = this.sentence.getHED()[0];
+        var viewAs = this.sentence.getChildren(HED, 'VOB');
     };
     ViewAsProvider.prototype.getPrompt = function () {
     };
@@ -106,27 +197,29 @@ var ViewAsProvider = /** @class */ (function () {
         console.log('开始编写视为技');
         this.getWhen();
         this.getFilterCard();
+        this.getSelectCard();
         this.getPosition();
         this.getViewAs();
         this.getPrompt();
     };
     ViewAsProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__sentence_sentence__["a" /* SentenceProvider */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__sentence_sentence__["a" /* SentenceProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__sentence_sentence__["a" /* SentenceProvider */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__knowledge_knowledge__["a" /* KnowledgeProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__knowledge_knowledge__["a" /* KnowledgeProvider */]) === "function" && _b || Object])
     ], ViewAsProvider);
     return ViewAsProvider;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=view-as.js.map
 
 /***/ }),
 
-/***/ 200:
+/***/ 202:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PainterProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(77);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(78);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -214,22 +307,21 @@ var PainterProvider = /** @class */ (function () {
     };
     PainterProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */]) === "function" && _a || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */]])
     ], PainterProvider);
     return PainterProvider;
-    var _a;
 }());
 
 //# sourceMappingURL=painter.js.map
 
 /***/ }),
 
-/***/ 201:
+/***/ 203:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HttpProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(77);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(78);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -260,8 +352,8 @@ var HttpProvider = /** @class */ (function () {
     HttpProvider.prototype.get = function () {
     };
     HttpProvider.prototype.post = function (text) {
-        var url = this.apiUrl;
-        // var url = this.nodeUrl; 
+        // var url = this.apiUrl;
+        var url = this.nodeUrl;
         var body = {
             "text": text
         };
@@ -283,13 +375,13 @@ var HttpProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 202:
+/***/ 204:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CodeProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_as_view_as__ = __webpack_require__(156);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_as_view_as__ = __webpack_require__(158);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__sentence_sentence__ = __webpack_require__(49);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -335,7 +427,7 @@ var CodeProvider = /** @class */ (function () {
         var BA = json.some(function (i) {
             return i.deprel == "BA";
         });
-        var HED = this.sentence.findHED();
+        var HED = this.sentence.getHED()[0];
         if (BA && HED.postag == 'v')
             return true;
     };
@@ -349,23 +441,23 @@ var CodeProvider = /** @class */ (function () {
     };
     CodeProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__view_as_view_as__["a" /* ViewAsProvider */],
-            __WEBPACK_IMPORTED_MODULE_2__sentence_sentence__["a" /* SentenceProvider */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__view_as_view_as__["a" /* ViewAsProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__view_as_view_as__["a" /* ViewAsProvider */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__sentence_sentence__["a" /* SentenceProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__sentence_sentence__["a" /* SentenceProvider */]) === "function" && _b || Object])
     ], CodeProvider);
     return CodeProvider;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=code.js.map
 
 /***/ }),
 
-/***/ 203:
+/***/ 205:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(204);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(224);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(206);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(226);
 
 
 Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
@@ -373,30 +465,34 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 /***/ }),
 
-/***/ 224:
+/***/ 226:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(100);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_platform_browser_animations__ = __webpack_require__(271);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_splash_screen__ = __webpack_require__(196);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__ = __webpack_require__(199);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_common_http__ = __webpack_require__(77);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_component__ = __webpack_require__(280);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_painter_painter__ = __webpack_require__(200);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_http_http__ = __webpack_require__(201);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_code_code__ = __webpack_require__(202);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_view_as_view_as__ = __webpack_require__(156);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(101);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_platform_browser_animations__ = __webpack_require__(273);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_splash_screen__ = __webpack_require__(198);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__ = __webpack_require__(201);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_common_http__ = __webpack_require__(78);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_component__ = __webpack_require__(282);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_painter_painter__ = __webpack_require__(202);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_http_http__ = __webpack_require__(203);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_code_code__ = __webpack_require__(204);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_view_as_view_as__ = __webpack_require__(158);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_sentence_sentence__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__providers_knowledge_knowledge__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__providers_rxjs_rxjs__ = __webpack_require__(103);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -443,6 +539,8 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_10__providers_code_code__["a" /* CodeProvider */],
                 __WEBPACK_IMPORTED_MODULE_11__providers_view_as_view_as__["a" /* ViewAsProvider */],
                 __WEBPACK_IMPORTED_MODULE_12__providers_sentence_sentence__["a" /* SentenceProvider */],
+                __WEBPACK_IMPORTED_MODULE_13__providers_knowledge_knowledge__["a" /* KnowledgeProvider */],
+                __WEBPACK_IMPORTED_MODULE_14__providers_rxjs_rxjs__["a" /* RxjsProvider */],
             ]
         })
     ], AppModule);
@@ -453,15 +551,15 @@ var AppModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 280:
+/***/ 282:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(100);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(199);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(196);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(101);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(201);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(198);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -532,6 +630,7 @@ var MyApp = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SentenceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__knowledge_knowledge__ = __webpack_require__(50);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -542,110 +641,171 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var SentenceProvider = /** @class */ (function () {
-    function SentenceProvider() {
-        this.translation = {
-            "使用": 'chooseToUse',
-            "打出": "chooseToRespond",
-            "红色": 'red',
-            "黑色": 'black',
-            "梅花": 'club',
-            "方块": 'diamond',
-            "红桃": 'heart',
-            "黑桃": 'spade'
-        };
-        this.replaceList = [
-            {
-                // reg:'/【[\u4e00-\u9fa5]+】/g',
-                reg: "【[\u4e00-\u9fa5]+】",
-                replacement: 'X',
-            }, {
-                reg: "梅花",
-                replacement: '草花',
-            }
-        ];
+    function SentenceProvider(knowledge) {
+        this.knowledge = knowledge;
     }
-    SentenceProvider.prototype.replaceCardName = function (msg) {
-        var newMsg = msg;
-        var i = this.replaceList.length;
-        while (i--) {
-            var k = this.replaceList[i];
-            console.log(k);
-            newMsg = newMsg.replace(new RegExp(k.reg, "g"), k.replacement);
-        }
-        console.log(newMsg);
-        return newMsg;
-    };
     SentenceProvider.prototype.receiveJson = function (json) {
         this.json = json;
     };
-    SentenceProvider.prototype.translate = function (word) {
-        for (var i in this.translation) {
-            if (i == word)
-                return this.translation[i];
-        }
-    };
     //判断类型
-    SentenceProvider.prototype.findHED = function () {
+    SentenceProvider.prototype.getHED = function () {
         var HED = this.json.filter(function (i) {
             return i.head == 0;
         });
-        console.log(HED[0]);
-        return HED[0];
+        return HED;
     };
-    SentenceProvider.prototype.findParent = function (item) {
+    SentenceProvider.prototype.getParent = function (item) {
         var parent = this.json.filter(function (i) {
             return i.id == item.head;
         });
-        console.log(parent[0]);
-        return parent[0];
+        return parent;
     };
-    SentenceProvider.prototype.findChildren = function (item, deprel) {
-        var num, result = this.json;
-        if (!deprel) {
-            var children = result.filter(function (i) {
-                return i.head == item.id;
-            });
-        }
-        else {
-            if (typeof deprel == "string")
-                num = 1;
-            else if (Array.isArray(deprel))
-                num = deprel.length;
-            while (num--) {
-                var children = result.filter(function (i) {
-                    return i.head == item.id && i.deprel == deprel;
-                });
-                result = children;
-            }
-        }
-        console.log(children);
+    SentenceProvider.prototype.getChildren = function (item, deprel, postag) {
+        var children = this.json.filter(function (i) {
+            if (i.head != item.id)
+                return false;
+            if (deprel && deprel != i.deprel)
+                return false;
+            if (postag && postag != i.postag)
+                return false;
+            return true;
+        });
         return children;
     };
-    SentenceProvider.prototype.findSibling = function (item) {
-        var sibling = this.findChildren(item).filter(function (i) {
+    SentenceProvider.prototype.getSibling = function (item) {
+        var sibling = this.getChildren(item).filter(function (i) {
             return i.deprel == "COO";
         });
-        console.log(sibling[0]);
-        return sibling[0];
+        return sibling;
     };
-    SentenceProvider.prototype.findDeprel = function (array, deprel) {
+    SentenceProvider.prototype.getDeprel = function (deprel, array) {
+        if (array === void 0) { array = this.json; }
         var result = array.filter(function (i) {
             return i.deprel == deprel;
         });
-        console.log(result);
         return result;
+    };
+    SentenceProvider.prototype.getFilter = function (deprel, postag) {
+        var filter = this.json.filter(function (i) {
+            return i.deprel == deprel && i.postag == postag;
+        });
+        return filter;
     };
     SentenceProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__knowledge_knowledge__["a" /* KnowledgeProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__knowledge_knowledge__["a" /* KnowledgeProvider */]) === "function" && _a || Object])
     ], SentenceProvider);
     return SentenceProvider;
+    var _a;
 }());
 
 //# sourceMappingURL=sentence.js.map
 
+/***/ }),
+
+/***/ 50:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return KnowledgeProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__rxjs_rxjs__ = __webpack_require__(103);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var KnowledgeProvider = /** @class */ (function () {
+    function KnowledgeProvider(rxjs) {
+        this.rxjs = rxjs;
+        this.typeList = {
+            suit: ['club', 'diamond', 'heart', 'spade'],
+            color: ['red', 'black'],
+            position: ['h', 'e', 'he'],
+        };
+        this.replaceList = [
+            {
+                reg: "【[\u4e00-\u9fa5]+】",
+                replacement: '扑克',
+            }, {
+                reg: "梅花|草花|方块|方片|红桃|黑桃",
+                replacement: '花色',
+            }
+        ];
+        this.translationList = {
+            "一": "1",
+            "两/二": 2,
+            "三": 3,
+            "四": 4,
+            "五": 5,
+            "六": 6,
+            "七": 7,
+            "使用": 'chooseToUse',
+            "打出": "chooseToRespond",
+            "和/与": '&&',
+            "非": '!',
+            "红色": 'red',
+            "黑色": 'black',
+            "梅花/草花": 'club',
+            "方块/方片": 'diamond',
+            "红桃": 'heart',
+            "黑桃": 'spade',
+            "杀": 'sha',
+            "闪": "shan",
+            "桃": 'tao',
+            "万箭齐发": 'wanjian',
+            "装备": 'e',
+            "判定": 'j',
+            "手": 'h',
+        };
+    }
+    KnowledgeProvider.prototype.getType = function (word) {
+        var w;
+        if (/[\u4e00-\u9fa5]+/.test(word))
+            w = this.getTranslation(word);
+        else
+            w = word;
+        for (var i in this.typeList) {
+            if (this.typeList[i].includes(w))
+                return i;
+        }
+    };
+    KnowledgeProvider.prototype.getTranslation = function (word) {
+        for (var i in this.translationList) {
+            if (i == word || (i.indexOf("/") != -1 && i.indexOf(word) != -1))
+                return this.translationList[i];
+        }
+        console.error("\u554A\u54C8\uFF0C\u6CA1\u6709\u627E\u5230\u3010" + word + "\u3011\u7684\u7FFB\u8BD1...");
+        this.rxjs.sendMessage("\u554A\u54C8\uFF0C\u6CA1\u6709\u627E\u5230\u3010" + word + "\u3011\u7684\u7FFB\u8BD1...");
+        return word;
+    };
+    KnowledgeProvider.prototype.getReplace = function (msg) {
+        debugger;
+        var newMsg = msg;
+        this.replaceList.map(function (i) {
+            newMsg = newMsg.replace(new RegExp(i.reg, "g"), i.replacement + ' ');
+        });
+        return newMsg;
+    };
+    KnowledgeProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__rxjs_rxjs__["a" /* RxjsProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__rxjs_rxjs__["a" /* RxjsProvider */]) === "function" && _a || Object])
+    ], KnowledgeProvider);
+    return KnowledgeProvider;
+    var _a;
+}());
+
+//# sourceMappingURL=knowledge.js.map
+
 /***/ })
 
-},[203]);
+},[205]);
 //# sourceMappingURL=main.js.map

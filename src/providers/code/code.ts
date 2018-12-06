@@ -35,7 +35,7 @@ export class CodeProvider {
 		var BA = json.some((i) => {
 			return i.deprel == "BA"
 		});
-		var HED = this.sentence.findHED();
+		var HED = this.sentence.getHED()[0];
 		if (BA && HED.postag == 'v') return true;
 	}
 	judgeEnable(json){

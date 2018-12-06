@@ -12,6 +12,8 @@ import { HttpProvider } from '../providers/http/http';
 import { CodeProvider } from '../providers/code/code';
 import { ViewAsProvider } from '../providers/view-as/view-as';
 import { SentenceProvider } from '../providers/sentence/sentence';
+import { KnowledgeProvider } from '../providers/knowledge/knowledge';
+import { RxjsProvider } from '../providers/rxjs/rxjs';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,8 @@ import { SentenceProvider } from '../providers/sentence/sentence';
     CodeProvider,
     ViewAsProvider,
     SentenceProvider,
+    KnowledgeProvider,
+    RxjsProvider,
   ]
 })
 export class AppModule {}

@@ -20,8 +20,8 @@ export class HttpProvider {
 
 	}
 	post(text){
-		var url = this.apiUrl;
-		// var url = this.nodeUrl; 
+		// var url = this.apiUrl;
+		var url = this.nodeUrl; 
 		var body = {
 			"text": text
 		}
