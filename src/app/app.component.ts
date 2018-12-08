@@ -1,6 +1,7 @@
 import { Component, HostBinding } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
+import { HttpProvider } from '../providers/http/http';
 
 @Component({
 	templateUrl: 'app.html',
@@ -39,10 +40,10 @@ export class MyApp {
 	constructor(
 		public platform: Platform,
 		public statusBar: StatusBar,
+		public http:HttpProvider,
 	) {
 		platform.ready().then(() => {
-			// statusBar.backgroundColorByHexString('#488aff');
-			// splashScreen.hide();
+			this.http.checkUpdate();
 		});
 	}
 }

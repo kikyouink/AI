@@ -77,6 +77,7 @@ export class AiPage {
 		return i._elementRef.nativeElement
 	}
 	prepareData(){
+		console.log(this.platform.dir())
 		this.plt=this.platform.is('android')?'m':'web';
 		this.loading = true;
 		this.canvas = this.canvasE.nativeElement;

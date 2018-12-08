@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { StatusBar } from '@ionic-native/status-bar';
 import { HttpClientModule } from '@angular/common/http';
 import { HTTP } from '@ionic-native/http';
+import { File } from '@ionic-native/file';
 
 import { MyApp } from './app.component';
 import { PainterProvider } from '../providers/painter/painter';
@@ -14,7 +15,6 @@ import { ViewAsProvider } from '../providers/view-as/view-as';
 import { SentenceProvider } from '../providers/sentence/sentence';
 import { KnowledgeProvider } from '../providers/knowledge/knowledge';
 import { RxjsProvider } from '../providers/rxjs/rxjs';
-import { SyncProvider } from '../providers/sync/sync';
 
 @NgModule({
   declarations: [
@@ -40,8 +40,8 @@ import { SyncProvider } from '../providers/sync/sync';
     SentenceProvider,
     KnowledgeProvider,
     RxjsProvider,
-	SyncProvider,
-	HTTP
+	HTTP,
+	File
   ]
 })
 export class AppModule {}

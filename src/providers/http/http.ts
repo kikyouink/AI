@@ -2,18 +2,21 @@ import { Platform } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HTTP } from '@ionic-native/http';
+import { File } from '@ionic-native/file';
 
 @Injectable()
 export class HttpProvider {
 	basicUrl: string = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/depparser?charset=UTF-8&access_token=';
 	token: string = '24.9ef1d08dd86089475358c1055f47716a.2592000.1546273111.282335-15004681';
 	apiUrl: string = this.basicUrl + this.token;
+	githubUrl:string="https://raw.githubusercontent.com/q2578443177/tcg/master/public/img/xiaosha/bixin.png"
 	nodeUrl: string = "http://localhost:3000";
 	plt:string;
 	constructor(
 		public platform:Platform,
 		public http:HttpClient,
-		public mhttp:HTTP
+		public mhttp:HTTP,
+		private file: File,
 	) {}
 	get() { 
 
@@ -41,6 +44,20 @@ export class HttpProvider {
 			}
 			return this.http.post(url, body, options)
 		}
+	}
+	checkUpdate(){
+		
+	}
+	downloadFile(){
+		this.mhttp.downloadFile(this.githubUrl, {}, {}, this.file.externalApplicationStorageDirectory+'xiaosha.png').then(function(entry) {
+			// prints the filename
+			console.log(entry.name);
+		  
+			// prints the filePath
+			console.log(entry.fullPath);
+		  }).catch(function(response) {
+			console.error(response.error);
+		  })
 	}
 
 }

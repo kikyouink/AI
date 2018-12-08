@@ -83,6 +83,11 @@
   resolved "http://registry.npm.taobao.org/@ionic-native/core/download/@ionic-native/core-4.17.0.tgz#0f2215dd9816e7cec3957ab7dae4c7224a431272"
   integrity sha1-DyIV3ZgW587DlXq32uTHIkpDEnI=
 
+"@ionic-native/file@^4.18.0":
+  version "4.18.0"
+  resolved "http://registry.npm.taobao.org/@ionic-native/file/download/@ionic-native/file-4.18.0.tgz#56946717bd780e863837bf0f1d86d158fff528d4"
+  integrity sha1-VpRnF714DoY4N78PHYbRWP/1KNQ=
+
 "@ionic-native/http@^4.18.0":
   version "4.18.0"
   resolved "http://registry.npm.taobao.org/@ionic-native/http/download/@ionic-native/http-4.18.0.tgz#baad852b75d7438ec5124906d056ac491dfac804"
