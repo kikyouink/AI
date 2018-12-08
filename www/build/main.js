@@ -1,1 +1,848 @@
-webpackJsonp([3],{101:function(t,n,e){"use strict";e.d(n,"a",function(){return o});e(3),e(53),e(54);var o=function(){function t(t,n){this.sentence=t,this.knowledge=n}return t.prototype.getWhen=function(){var t,n=this.sentence.getHED()[0],e=this.sentence.getChildren(n,"VV")[0],o=this.sentence.getSibling(e)[0];if(o){var a=[];a.push(this.knowledge.getTranslation(e.word)),a.push(this.knowledge.getTranslation(o.word)),t=a}else t=this.knowledge.getTranslation(e.word);return console.log("时机:"),console.log(t),t},t.prototype.getFilterCard=function(){var t=this,n="",e=[],o=this.sentence.getFilter("BA","n")[0];this.sentence.getChildren(o,"ATT","n").map(function(n){var o=t.knowledge.getType(n.word);if("suit"==o||"color"==o){var a=t.knowledge.getTranslation(n.word);e.push({type:o,value:a})}});for(var a=e.length;a--;){var i=[e[a].type,e[a].value];n+="get."+i[0]+"(card)=='"+i[1]+"'",a&&(n+="&&")}n="return "+n;var l=new Function("card","player",n);return console.log("卡牌条件:"),console.log(l),l},t.prototype.getSelectCard=function(){var t=this.sentence.getDeprel("QUN")[0].word,n=this.knowledge.getTranslation(t);return console.log("卡牌数量:"),console.log(n),n},t.prototype.getPosition=function(){var t,n=this,e=this.sentence.getFilter("BA","n")[0];return this.sentence.getChildren(e,"ATT","n").map(function(e){"position"==n.knowledge.getType(e.word)&&(t=n.knowledge.getTranslation(e.word))}),t||(t="he"),console.log("卡牌区域:"),console.log(t),t},t.prototype.getViewAs=function(){var t=this.sentence.getHED()[0];this.sentence.getChildren(t,"VOB")},t.prototype.getPrompt=function(){},t.prototype.compile=function(){},t.prototype.start=function(){console.log("开始编写视为技"),this.getWhen(),this.getFilterCard(),this.getSelectCard(),this.getPosition(),this.getViewAs(),this.getPrompt()},t}()},124:function(t,n,e){"use strict";e.d(n,"a",function(){return o});e(3);var o=function(){function t(t){this.http=t}return t.prototype.clear=function(t){t.getContext("2d").clearRect(0,0,t.width,t.height)},t.prototype.resize=function(t,n){t.width=n.offsetWidth},t.prototype.draw=function(t,n,e,o){var a,i;a=80;var l,r=t.getContext("2d");e<o?(i=0,l="right",r.strokeStyle="#488aff"):(i=160,l="left",r.strokeStyle="#ff4848"),r.lineWidth=3,r.beginPath(),r.moveTo(n,a),r.quadraticCurveTo(e,i,o,80),r.stroke(),this.drawArrow(r,e,l)},t.prototype.drawArrow=function(t,n,e){t.beginPath();var o,a,i;"right"==e?(a={x:o=n-10,y:45},i={x:o,y:35},t.strokeStyle="#488aff"):(a={x:o=n+10,y:115},i={x:o,y:125},t.strokeStyle="#ff4848"),t.moveTo(a.x,a.y),t.lineTo(n,(a.y+i.y)/2),t.lineTo(i.x,i.y),t.stroke()},t}()},125:function(t,n,e){"use strict";e.d(n,"a",function(){return o});e(3),e(75),e(98),e(100);var o=function(){function t(t,n,e,o){this.platform=t,this.http=n,this.mhttp=e,this.file=o,this.basicUrl="https://aip.baidubce.com/rpc/2.0/nlp/v1/depparser?charset=UTF-8&access_token=",this.token="24.9ef1d08dd86089475358c1055f47716a.2592000.1546273111.282335-15004681",this.apiUrl=this.basicUrl+this.token,this.githubUrl="https://raw.githubusercontent.com/q2578443177/tcg/master/public/img/xiaosha/bixin.png",this.nodeUrl="http://localhost:3000",this.downloadFile(),console.log(this.file.applicationDirectory),console.log(this.file.applicationStorageDirectory),console.log(this.file.dataDirectory),console.log(this.file.cacheDirectory),console.log(this.file.externalApplicationStorageDirectory),console.log(this.file.externalDataDirectory),console.log(this.file.externalCacheDirectory),console.log(this.file.externalRootDirectory),console.log(this.file.cacheDirectory),console.log(location.href.substring(0,location.href.lastIndexOf("/")))}return t.prototype.get=function(){},t.prototype.post=function(t){var n,e,o={text:t};return this.platform.is("android")?(n=this.apiUrl,e={"Content-Type":"application/json;charset=utf-8"},this.mhttp.setDataSerializer("json"),this.mhttp.post(n,o,e)):(n=this.nodeUrl,e={headers:{"Content-Type":"application/json"}},this.http.post(n,o,e))},t.prototype.downloadFile=function(){this.mhttp.downloadFile(this.githubUrl,{},{},this.file.externalApplicationStorageDirectory+"xiaosha.png").then(function(t){console.log(t.name),console.log(t.fullPath)}).catch(function(t){console.error(t.error)})},t}()},126:function(t,n,e){"use strict";e.d(n,"a",function(){return o});e(3),e(101),e(53);var o=function(){function t(t,n){this.viewAs=t,this.sentence=n}return t.prototype.create=function(t){console.log("coding...");var n=this.judgeType(t);switch(console.log(t),n){case"viewAs":this.viewAs.start();break;default:this.quit()}},t.prototype.getPassages=function(){},t.prototype.judgeType=function(t){return this.judgeViewAs(t)?"viewAs":this.judgeEnable(t)?"enable":this.judgeTrigger(t)?"trigger":this.quit()},t.prototype.judgeViewAs=function(t){var n=t.some(function(t){return"BA"==t.deprel}),e=this.sentence.getHED()[0];if(n&&"v"==e.postag)return!0},t.prototype.judgeEnable=function(t){return!1},t.prototype.judgeTrigger=function(t){return!1},t.prototype.quit=function(){},t}()},127:function(t,n,e){"use strict";e.d(n,"a",function(){return o});e(3);var o=function(){return function(){}}()},146:function(t,n){function e(t){return Promise.resolve().then(function(){throw new Error("Cannot find module '"+t+"'.")})}e.keys=function(){return[]},e.resolve=e,t.exports=e,e.id=146},175:function(t,n,e){function o(t){var n=a[t];return n?e.e(n[1]).then(function(){return e(n[0])}):Promise.reject(new Error("Cannot find module '"+t+"'."))}var a={"../pages/ai/ai.module.ngfactory":[248,0],"../pages/book/book.module.ngfactory":[249,1],"../pages/tabs/tabs.module.ngfactory":[250,2]};o.keys=function(){return Object.keys(a)},o.id=175,t.exports=o},211:function(t,n,e){"use strict";function o(t){return l._19(0,[(t()(),l.Z(0,0,null,null,10,"button",[["class","item item-block"],["ion-item",""],["menuClose",""]],null,[[null,"click"]],function(t,n,e){var o=!0;if("click"===n){o=!1!==l._11(t,6).close()&&o}return o},O.b,O.a)),l.Y(1,1097728,null,3,U.a,[Y.a,E.a,l.j,l.z,[2,z.a]],null,null),l._16(335544320,6,{contentLabel:0}),l._16(603979776,7,{_buttons:1}),l._16(603979776,8,{_icons:1}),l.Y(5,16384,null,0,L.a,[],null,null),l.Y(6,16384,null,0,M.a,[B.a],{menuClose:[0,"menuClose"]},null),(t()(),l._18(-1,2,["\n\t\t\t\t"])),(t()(),l.Z(8,0,null,0,1,"ion-icon",[["item-start",""],["role","img"]],[[2,"hide",null]],null,null,null,null)),l.Y(9,147456,[[8,4]],0,Z.a,[E.a,l.j,l.z],{name:[0,"name"]},null),(t()(),l._18(10,2,["","\n\t\t\t"]))],function(t,n){t(n,6,0,"");t(n,9,0,n.context.$implicit.icon)},function(t,n){t(n,8,0,l._11(n,9)._hidden);t(n,10,0,n.context.$implicit.name)})}function a(t){return l._19(0,[(t()(),l.Z(0,0,null,null,26,"ion-menu",[["role","navigation"]],null,null,null,q.b,q.a)),l._14(6144,null,R.a,null,[V.a]),l.Y(2,245760,null,2,V.a,[B.a,l.j,E.a,H.a,l.z,N.a,W.l,X.a,G.a],{content:[0,"content"]},null),l._16(335544320,1,{menuContent:0}),l._16(335544320,2,{menuNav:0}),(t()(),l._18(-1,0,["\n\t"])),(t()(),l.Z(6,0,null,0,19,"ion-content",[],[[2,"statusbar-padding",null],[2,"has-refresher",null]],null,null,I.b,I.a)),l.Y(7,4374528,[[1,4]],0,J.a,[E.a,H.a,X.a,l.j,l.z,G.a,N.a,l.u,[2,K.a],[2,$.a]],null,null),(t()(),l._18(-1,1,["\n\t\t"])),(t()(),l.Z(9,0,null,1,0,"div",[["class","bg"]],null,null,null,null,null)),(t()(),l._18(-1,1,["\n\t\t"])),(t()(),l.Z(11,0,null,1,13,"ion-list",[["no-lines",""]],null,null,null,null,null)),l.Y(12,16384,null,0,Q.a,[E.a,l.j,l.z,H.a,W.l,X.a],null,null),(t()(),l._18(-1,null,["\n\t\t\t"])),(t()(),l.Z(14,0,null,null,6,"ion-list-header",[["class","item"]],null,null,null,O.b,O.a)),l.Y(15,1097728,null,3,U.a,[Y.a,E.a,l.j,l.z,[2,z.a]],null,null),l._16(335544320,3,{contentLabel:0}),l._16(603979776,4,{_buttons:1}),l._16(603979776,5,{_icons:1}),l.Y(19,16384,null,0,tt.a,[E.a,l.z,l.j,[8,null]],null,null),(t()(),l._18(-1,2,["\n\t\t\t\t菜单\n\t\t\t"])),(t()(),l._18(-1,null,["\n\t\t\t"])),(t()(),l.U(16777216,null,null,1,null,o)),l.Y(23,802816,null,0,nt.h,[l.I,l.F,l.p],{ngForOf:[0,"ngForOf"]},null),(t()(),l._18(-1,null,["\n\t\t"])),(t()(),l._18(-1,1,["\n\t"])),(t()(),l._18(-1,0,["\n"])),(t()(),l._18(-1,null,["\n"])),(t()(),l.Z(28,0,null,null,2,"ion-nav",[],null,null,null,et.b,et.a)),l._14(6144,null,R.a,null,[ot.a]),l.Y(30,4374528,[["content",4]],0,ot.a,[[2,K.a],[2,$.a],G.a,E.a,H.a,l.j,l.u,l.z,l.i,W.l,at.a,[2,it.a],X.a,l.k],{root:[0,"root"]},null)],function(t,n){var e=n.component;t(n,2,0,l._11(n,30));t(n,23,0,e.items);t(n,30,0,e.rootPage)},function(t,n){t(n,6,0,l._11(n,7).statusbarPadding,l._11(n,7)._hasRefresher)})}Object.defineProperty(n,"__esModule",{value:!0});var i=e(28),l=e(0),r=(e(3),e(75),e(198)),u=e(74),s=e(69),c=e(98),f=e(100),p=function(){return function(t,n){this.platform=t,this.statusBar=n,this.rootPage="TabsPage",this.items=[{icon:"leaf",name:"个人主页",page:"PersonPage"},{icon:"shirt",name:"个性装扮",page:"DressPage"},{icon:"star",name:"我的收藏",page:"StarPage"},{icon:"photos",name:"我的相册",page:"PhotoPage"},{icon:"folder",name:"我的文件",page:"FolderPage"}],t.ready().then(function(){})}}(),h=e(124),g=e(125),d=e(126),_=e(101),y=e(53),b=e(54),m=e(77),v=e(127),w=function(){return function(){}}(),k=e(44),j=e(200),T=e(201),x=e(202),P=e(203),C=e(204),D=e(205),F=e(206),A=e(207),S=e(208),O=e(177),U=e(17),Y=e(15),E=e(1),z=e(41),L=e(63),M=e(96),B=e(22),Z=e(35),q=e(246),R=e(27),V=e(67),H=e(4),N=e(24),W=e(6),X=e(9),G=e(8),I=e(209),J=e(21),K=e(5),$=e(19),Q=e(49),tt=e(65),nt=e(13),et=e(247),ot=e(50),at=e(26),it=e(14),lt=l.X({encapsulation:2,styles:[],data:{}}),rt=l.V("ng-component",p,function(t){return l._19(0,[(t()(),l.Z(0,0,null,null,1,"ng-component",[],null,null,null,a,lt)),l.Y(1,49152,null,0,p,[H.a,u.a],null,null)],null,null)},{},{},[]),ut=e(103),st=e(199),ct=e(18),ft=e(78),pt=e(89),ht=e(91),gt=e(102),dt=e(33),_t=e(95),yt=e(121),bt=e(46),mt=e(36),vt=e(107),wt=e(60),kt=e(111),jt=e(105),Tt=e(79),xt=e(197),Pt=e(104),Ct=e(97),Dt=e(106),Ft=l.W(w,[k.b],function(t){return l._7([l._8(512,l.i,l.S,[[8,[j.a,T.a,x.a,P.a,C.a,D.a,F.a,A.a,S.a,rt]],[3,l.i],l.s]),l._8(5120,l.r,l._15,[[3,l.r]]),l._8(4608,nt.k,nt.j,[l.r,[2,nt.s]]),l._8(5120,l.b,l._1,[]),l._8(5120,l.p,l._9,[]),l._8(5120,l.q,l._12,[]),l._8(4608,i.c,i.q,[nt.c]),l._8(6144,l.D,null,[i.c]),l._8(4608,i.f,ut.a,[]),l._8(5120,i.d,function(t,n,e,o,a){return[new i.k(t,n),new i.o(e),new i.n(o,a)]},[nt.c,l.u,nt.c,nt.c,i.f]),l._8(4608,i.e,i.e,[i.d,l.u]),l._8(135680,i.m,i.m,[nt.c]),l._8(4608,i.l,i.l,[i.e,i.m]),l._8(5120,st.a,r.d,[]),l._8(5120,st.c,r.e,[]),l._8(4608,st.b,r.c,[st.a,st.c]),l._8(5120,l.B,r.f,[i.l,st.b,l.u]),l._8(6144,i.p,null,[i.m]),l._8(4608,l.G,l.G,[l.u]),l._8(4608,i.h,i.h,[nt.c]),l._8(4608,i.i,i.i,[nt.c]),l._8(4608,s.h,s.n,[nt.c,l.w,s.l]),l._8(4608,s.o,s.o,[s.h,s.m]),l._8(5120,s.a,function(t){return[t]},[s.o]),l._8(4608,s.k,s.k,[]),l._8(6144,s.i,null,[s.k]),l._8(4608,s.g,s.g,[s.i]),l._8(6144,s.b,null,[s.g]),l._8(4608,s.f,s.j,[s.b,l.o]),l._8(4608,s.c,s.c,[s.f]),l._8(4608,ct.k,ct.k,[]),l._8(4608,ct.c,ct.c,[]),l._8(4608,ft.b,r.b,[l.B,i.b]),l._8(4608,pt.a,pt.a,[G.a,E.a]),l._8(4608,ht.a,ht.a,[G.a,E.a]),l._8(4608,gt.a,gt.a,[]),l._8(4608,Y.a,Y.a,[]),l._8(4608,dt.a,dt.a,[H.a]),l._8(4608,N.a,N.a,[E.a,H.a,l.u,X.a]),l._8(4608,_t.a,_t.a,[G.a,E.a]),l._8(5120,nt.f,yt.c,[nt.q,[2,nt.a],E.a]),l._8(4608,nt.e,nt.e,[nt.f]),l._8(5120,bt.b,bt.d,[G.a,bt.a]),l._8(5120,it.a,it.b,[G.a,bt.b,nt.e,mt.b,l.i]),l._8(4608,vt.a,vt.a,[G.a,E.a,it.a]),l._8(4608,wt.a,wt.a,[G.a,E.a]),l._8(4608,kt.a,kt.a,[G.a,E.a,it.a]),l._8(4608,jt.a,jt.a,[E.a,H.a,X.a,G.a,W.l]),l._8(4608,Tt.a,Tt.a,[G.a,E.a]),l._8(4608,at.a,at.a,[H.a,E.a]),l._8(4608,u.a,u.a,[]),l._8(4608,h.a,h.a,[s.c]),l._8(4608,c.a,c.a,[]),l._8(4608,f.a,f.a,[]),l._8(4608,g.a,g.a,[H.a,s.c,c.a,f.a]),l._8(4608,m.a,m.a,[]),l._8(4608,b.a,b.a,[m.a]),l._8(4608,y.a,y.a,[b.a]),l._8(4608,_.a,_.a,[y.a,b.a]),l._8(4608,d.a,d.a,[_.a,y.a]),l._8(4608,v.a,v.a,[]),l._8(512,nt.b,nt.b,[]),l._8(512,l.k,xt.a,[]),l._8(256,E.b,{},[]),l._8(1024,Pt.a,Pt.b,[]),l._8(1024,H.a,H.b,[i.b,Pt.a,l.u]),l._8(1024,E.a,E.c,[E.b,H.a]),l._8(512,X.a,X.a,[H.a]),l._8(512,B.a,B.a,[]),l._8(512,G.a,G.a,[E.a,H.a,[2,B.a]]),l._8(512,W.l,W.l,[G.a]),l._8(256,bt.a,{links:[{loadChildren:"../pages/ai/ai.module.ngfactory#AiPageModuleNgFactory",name:"AiPage",segment:"ai",priority:"low",defaultHistory:[]},{loadChildren:"../pages/book/book.module.ngfactory#BookPageModuleNgFactory",name:"BookPage",segment:"book",priority:"low",defaultHistory:[]},{loadChildren:"../pages/tabs/tabs.module.ngfactory#TabsPageModuleNgFactory",name:"TabsPage",segment:"tabs",priority:"low",defaultHistory:[]}]},[]),l._8(512,l.h,l.h,[]),l._8(512,Ct.a,Ct.a,[l.h]),l._8(1024,mt.b,mt.c,[Ct.a,l.o]),l._8(1024,l.c,function(t,n,e,o,a,l,r,u,s,c,f,p,h){return[i.s(t),Dt.a(n),gt.b(e,o),jt.b(a,l,r,u,s),mt.d(c,f,p,h)]},[[2,l.t],E.a,H.a,X.a,E.a,H.a,X.a,G.a,W.l,E.a,bt.a,mt.b,l.u]),l._8(512,l.d,l.d,[[2,l.c]]),l._8(131584,l.f,l.f,[l.u,l.T,l.o,l.k,l.i,l.d]),l._8(512,l.e,l.e,[l.f]),l._8(512,i.a,i.a,[[3,i.a]]),l._8(512,s.e,s.e,[]),l._8(512,s.d,s.d,[]),l._8(512,ct.j,ct.j,[]),l._8(512,ct.d,ct.d,[]),l._8(512,ct.i,ct.i,[]),l._8(512,yt.a,yt.a,[]),l._8(512,r.a,r.a,[]),l._8(512,w,w,[]),l._8(256,s.l,"XSRF-TOKEN",[]),l._8(256,s.m,"X-XSRF-TOKEN",[]),l._8(256,k.a,p,[]),l._8(256,nt.a,"/",[])])});Object(l.M)(),Object(i.j)().bootstrapModuleFactory(Ft)},53:function(t,n,e){"use strict";e.d(n,"a",function(){return o});e(3),e(54);var o=function(){function t(t){this.knowledge=t}return t.prototype.receiveJson=function(t){this.json=t},t.prototype.getHED=function(){return this.json.filter(function(t){return 0==t.head})},t.prototype.getParent=function(t){return this.json.filter(function(n){return n.id==t.head})},t.prototype.getChildren=function(t,n,e){return this.json.filter(function(o){return o.head==t.id&&((!n||n==o.deprel)&&(!e||e==o.postag))})},t.prototype.getSibling=function(t){return this.getChildren(t).filter(function(t){return"COO"==t.deprel})},t.prototype.getDeprel=function(t,n){void 0===n&&(n=this.json);return n.filter(function(n){return n.deprel==t})},t.prototype.getFilter=function(t,n){return this.json.filter(function(e){return e.deprel==t&&e.postag==n})},t}()},54:function(t,n,e){"use strict";e.d(n,"a",function(){return o});e(3),e(77);var o=function(){function t(t){this.rxjs=t,this.typeList={suit:["club","diamond","heart","spade"],color:["red","black"],position:["h","e","he"]},this.replaceList=[{reg:"【[一-龥]+】",replacement:"扑克"},{reg:"梅花|草花|方块|方片|红桃|黑桃",replacement:"花色"}],this.translationList={"一":"1","两/二":2,"三":3,"四":4,"五":5,"六":6,"七":7,"使用":"chooseToUse","打出":"chooseToRespond","和/与":"&&","非":"!","红色":"red","黑色":"black","梅花/草花":"club","方块/方片":"diamond","红桃":"heart","黑桃":"spade","杀":"sha","闪":"shan","桃":"tao","万箭齐发":"wanjian","装备":"e","判定":"j","手":"h"}}return t.prototype.getType=function(t){var n;n=/[\u4e00-\u9fa5]+/.test(t)?this.getTranslation(t):t;for(var e in this.typeList)if(this.typeList[e].includes(n))return e},t.prototype.getTranslation=function(t){for(var n in this.translationList)if(n==t||-1!=n.indexOf("/")&&-1!=n.indexOf(t))return this.translationList[n];return console.error("啊哈，没有找到【"+t+"】的翻译..."),this.rxjs.sendMessage("啊哈，没有找到【"+t+"】的翻译..."),t},t.prototype.getReplace=function(t){var n=t;return this.replaceList.map(function(t){n=n.replace(new RegExp(t.reg,"g"),t.replacement+" ")}),n},t}()},77:function(t,n,e){"use strict";e.d(n,"a",function(){return a});e(3);var o=e(39),a=(e.n(o),function(){function t(){this.subject=new o.Subject}return t.prototype.sendMessage=function(t){this.subject.next({text:t})},t.prototype.clearMessage=function(){this.subject.next()},t.prototype.getMessage=function(){return this.subject.asObservable()},t}())}},[211]);
+webpackJsonp([3],{
+
+/***/ 104:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HttpProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(79);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_http__ = __webpack_require__(160);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_file__ = __webpack_require__(162);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+var HttpProvider = /** @class */ (function () {
+    function HttpProvider(platform, http, mhttp, file) {
+        this.platform = platform;
+        this.http = http;
+        this.mhttp = mhttp;
+        this.file = file;
+        this.basicUrl = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/depparser?charset=UTF-8&access_token=';
+        this.token = '24.9ef1d08dd86089475358c1055f47716a.2592000.1546273111.282335-15004681';
+        this.apiUrl = this.basicUrl + this.token;
+        this.githubUrl = "https://raw.githubusercontent.com/q2578443177/AI/master/";
+        this.nodeUrl = "http://localhost:3000";
+    }
+    HttpProvider.prototype.get = function (url) {
+        this.mhttp.get(url, {}, {}).then(function (res) {
+            console.log(res);
+            res.data = JSON.parse(res.data);
+            console.log(res.data);
+        });
+    };
+    HttpProvider.prototype.post = function (text) {
+        var url;
+        var body = {
+            "text": text
+        };
+        var options;
+        if (this.platform.is('android')) {
+            url = this.apiUrl;
+            options = {
+                'Content-Type': 'application/json;charset=utf-8',
+            };
+            this.mhttp.setDataSerializer('json');
+            return this.mhttp.post(url, body, options);
+        }
+        else {
+            url = this.nodeUrl;
+            options = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+            return this.http.post(url, body, options);
+        }
+    };
+    HttpProvider.prototype.checkUpdate = function () {
+        var url = "https://raw.githubusercontent.com/q2578443177/AI/master/update.js";
+        this.get(url);
+    };
+    HttpProvider.prototype.downloadFile = function (fileName) {
+        this.mhttp.downloadFile(this.githubUrl, {}, {}, this.file.externalApplicationStorageDirectory + fileName).then(function (entry) {
+            // prints the filename
+            console.log(entry.name);
+            // prints the filePath
+            console.log(entry.fullPath);
+        }).catch(function (response) {
+            console.error(response.error);
+        });
+    };
+    HttpProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["g" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["g" /* Platform */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_native_http__["a" /* HTTP */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_native_http__["a" /* HTTP */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__ionic_native_file__["a" /* File */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__ionic_native_file__["a" /* File */]) === "function" && _d || Object])
+    ], HttpProvider);
+    return HttpProvider;
+    var _a, _b, _c, _d;
+}());
+
+//# sourceMappingURL=http.js.map
+
+/***/ }),
+
+/***/ 105:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RxjsProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+var RxjsProvider = /** @class */ (function () {
+    function RxjsProvider() {
+        this.subject = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["Subject"]();
+    }
+    RxjsProvider.prototype.sendMessage = function (message) {
+        this.subject.next({ text: message });
+    };
+    RxjsProvider.prototype.clearMessage = function () {
+        this.subject.next();
+    };
+    RxjsProvider.prototype.getMessage = function () {
+        return this.subject.asObservable();
+    };
+    RxjsProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])()
+    ], RxjsProvider);
+    return RxjsProvider;
+}());
+
+//# sourceMappingURL=rxjs.js.map
+
+/***/ }),
+
+/***/ 117:
+/***/ (function(module, exports) {
+
+function webpackEmptyAsyncContext(req) {
+	// Here Promise.resolve().then() is used instead of new Promise() to prevent
+	// uncatched exception popping up in devtools
+	return Promise.resolve().then(function() {
+		throw new Error("Cannot find module '" + req + "'.");
+	});
+}
+webpackEmptyAsyncContext.keys = function() { return []; };
+webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
+module.exports = webpackEmptyAsyncContext;
+webpackEmptyAsyncContext.id = 117;
+
+/***/ }),
+
+/***/ 159:
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"../pages/ai/ai.module": [
+		284,
+		0
+	],
+	"../pages/book/book.module": [
+		285,
+		2
+	],
+	"../pages/tabs/tabs.module": [
+		286,
+		1
+	]
+};
+function webpackAsyncContext(req) {
+	var ids = map[req];
+	if(!ids)
+		return Promise.reject(new Error("Cannot find module '" + req + "'."));
+	return __webpack_require__.e(ids[1]).then(function() {
+		return __webpack_require__(ids[0]);
+	});
+};
+webpackAsyncContext.keys = function webpackAsyncContextKeys() {
+	return Object.keys(map);
+};
+webpackAsyncContext.id = 159;
+module.exports = webpackAsyncContext;
+
+/***/ }),
+
+/***/ 163:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ViewAsProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sentence_sentence__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__knowledge_knowledge__ = __webpack_require__(51);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var ViewAsProvider = /** @class */ (function () {
+    function ViewAsProvider(sentence, knowledge) {
+        this.sentence = sentence;
+        this.knowledge = knowledge;
+    }
+    ViewAsProvider.prototype.getWhen = function () {
+        var when;
+        var HED = this.sentence.getHED()[0];
+        var when1 = this.sentence.getChildren(HED, "VV")[0];
+        var when2 = this.sentence.getSibling(when1)[0];
+        if (!when2)
+            when = this.knowledge.getTranslation(when1.word);
+        else {
+            var arr = [];
+            arr.push(this.knowledge.getTranslation(when1.word));
+            arr.push(this.knowledge.getTranslation(when2.word));
+            when = arr;
+        }
+        console.log('时机:');
+        console.log(when);
+        return when;
+    };
+    ViewAsProvider.prototype.getFilterCard = function () {
+        var _this = this;
+        // debugger;
+        var main = "", filter = [];
+        var card = this.sentence.getFilter('BA', 'n')[0];
+        var ATT = this.sentence.getChildren(card, 'ATT', 'n');
+        ATT.map(function (i) {
+            var type = _this.knowledge.getType(i.word);
+            if (type == 'suit' || type == 'color') {
+                var value = _this.knowledge.getTranslation(i.word);
+                filter.push({
+                    type: type,
+                    value: value
+                });
+            }
+        });
+        var j = filter.length;
+        while (j--) {
+            var _a = [filter[j].type, filter[j].value], type = _a[0], value = _a[1];
+            main += "get." + type + "(card)=='" + value + "'";
+            if (j)
+                main += "&&";
+        }
+        main = "return " + main;
+        var filterCard = new Function("card", "player", main);
+        console.log('卡牌条件:');
+        console.log(filterCard);
+        return filterCard;
+    };
+    ViewAsProvider.prototype.getSelectCard = function () {
+        var num = this.sentence.getDeprel('QUN')[0].word;
+        var num2 = this.knowledge.getTranslation(num);
+        console.log('卡牌数量:');
+        console.log(num2);
+        return num2;
+    };
+    ViewAsProvider.prototype.getPosition = function () {
+        var _this = this;
+        var position;
+        var card = this.sentence.getFilter('BA', 'n')[0];
+        var ATT = this.sentence.getChildren(card, 'ATT', 'n');
+        ATT.map(function (i) {
+            var type = _this.knowledge.getType(i.word);
+            if (type == 'position') {
+                position = _this.knowledge.getTranslation(i.word);
+            }
+        });
+        if (!position)
+            position = "he";
+        console.log('卡牌区域:');
+        console.log(position);
+        return position;
+    };
+    ViewAsProvider.prototype.getViewAs = function () {
+        var HED = this.sentence.getHED()[0];
+        var viewAs = this.sentence.getChildren(HED, 'VOB');
+    };
+    ViewAsProvider.prototype.getPrompt = function () {
+    };
+    ViewAsProvider.prototype.compile = function () {
+    };
+    //视为技
+    ViewAsProvider.prototype.start = function () {
+        console.log('开始编写视为技');
+        this.getWhen();
+        this.getFilterCard();
+        this.getSelectCard();
+        this.getPosition();
+        this.getViewAs();
+        this.getPrompt();
+    };
+    ViewAsProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__sentence_sentence__["a" /* SentenceProvider */],
+            __WEBPACK_IMPORTED_MODULE_2__knowledge_knowledge__["a" /* KnowledgeProvider */]])
+    ], ViewAsProvider);
+    return ViewAsProvider;
+}());
+
+//# sourceMappingURL=view-as.js.map
+
+/***/ }),
+
+/***/ 204:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PainterProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(79);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+/*
+  Generated class for the PainterProvider provider.
+
+  See https://angular.io/guide/dependency-injection for more info on providers
+  and Angular DI.
+*/
+var PainterProvider = /** @class */ (function () {
+    function PainterProvider(http) {
+        this.http = http;
+    }
+    PainterProvider.prototype.clear = function (canvas) {
+        var ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    };
+    PainterProvider.prototype.resize = function (canvas, parent) {
+        canvas.width = parent.offsetWidth;
+        // canvas.height = parent.offsetHeight; 
+    };
+    PainterProvider.prototype.draw = function (canvas, x1, x2, x3) {
+        var y1, y2, y3;
+        y1 = y3 = 80;
+        var dire;
+        var ctx = canvas.getContext("2d");
+        if (x2 < x3) {
+            y2 = 0;
+            dire = "right";
+            ctx.strokeStyle = "#488aff";
+        }
+        else {
+            y2 = 160;
+            dire = "left";
+            ctx.strokeStyle = "#ff4848";
+        }
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1); //起始点
+        //绘制二次贝塞尔曲线
+        ctx.quadraticCurveTo(x2, y2, x3, y3);
+        ctx.stroke();
+        this.drawArrow(ctx, x2, dire);
+    };
+    PainterProvider.prototype.drawArrow = function (ctx, x2, dire) {
+        ctx.beginPath();
+        var x, y, top, bottom;
+        if (dire == "right") {
+            x = x2 - 10;
+            top = {
+                x: x,
+                y: 45,
+            };
+            bottom = {
+                x: x,
+                y: 35,
+            };
+            ctx.strokeStyle = "#488aff";
+        }
+        else {
+            x = x2 + 10;
+            top = {
+                x: x,
+                y: 115,
+            };
+            bottom = {
+                x: x,
+                y: 125,
+            };
+            ctx.strokeStyle = "#ff4848";
+        }
+        ctx.moveTo(top.x, top.y);
+        ctx.lineTo(x2, (top.y + bottom.y) / 2);
+        ctx.lineTo(bottom.x, bottom.y);
+        ctx.stroke();
+    };
+    PainterProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */]])
+    ], PainterProvider);
+    return PainterProvider;
+}());
+
+//# sourceMappingURL=painter.js.map
+
+/***/ }),
+
+/***/ 205:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CodeProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_as_view_as__ = __webpack_require__(163);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__sentence_sentence__ = __webpack_require__(50);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+/*
+  Generated class for the CodeProvider provider.
+
+  See https://angular.io/guide/dependency-injection for more info on providers
+  and Angular DI.
+*/
+var CodeProvider = /** @class */ (function () {
+    function CodeProvider(viewAs, sentence) {
+        this.viewAs = viewAs;
+        this.sentence = sentence;
+    }
+    CodeProvider.prototype.create = function (json) {
+        console.log('coding...');
+        var type = this.judgeType(json);
+        console.log(json);
+        switch (type) {
+            case "viewAs":
+                this.viewAs.start();
+                break;
+            // case "enable": this.enable.compile(json); break;
+            // case "trigger": this.trigger.compile(json); break;
+            default: this.quit();
+        }
+    };
+    CodeProvider.prototype.getPassages = function () {
+    };
+    CodeProvider.prototype.judgeType = function (json) {
+        return this.judgeViewAs(json) ? "viewAs" : this.judgeEnable(json) ? "enable" : this.judgeTrigger(json) ? "trigger" : this.quit();
+    };
+    CodeProvider.prototype.judgeViewAs = function (json) {
+        var BA = json.some(function (i) {
+            return i.deprel == "BA";
+        });
+        var HED = this.sentence.getHED()[0];
+        if (BA && HED.postag == 'v')
+            return true;
+    };
+    CodeProvider.prototype.judgeEnable = function (json) {
+        return false;
+    };
+    CodeProvider.prototype.judgeTrigger = function (json) {
+        return false;
+    };
+    CodeProvider.prototype.quit = function () {
+    };
+    CodeProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__view_as_view_as__["a" /* ViewAsProvider */],
+            __WEBPACK_IMPORTED_MODULE_2__sentence_sentence__["a" /* SentenceProvider */]])
+    ], CodeProvider);
+    return CodeProvider;
+}());
+
+//# sourceMappingURL=code.js.map
+
+/***/ }),
+
+/***/ 206:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(207);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(227);
+
+
+Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
+//# sourceMappingURL=main.js.map
+
+/***/ }),
+
+/***/ 227:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_platform_browser_animations__ = __webpack_require__(281);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(203);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_common_http__ = __webpack_require__(79);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_http__ = __webpack_require__(160);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_file__ = __webpack_require__(162);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__app_component__ = __webpack_require__(283);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_painter_painter__ = __webpack_require__(204);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_http_http__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_code_code__ = __webpack_require__(205);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_view_as_view_as__ = __webpack_require__(163);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__providers_sentence_sentence__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__providers_knowledge_knowledge__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__providers_rxjs_rxjs__ = __webpack_require__(105);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var AppModule = /** @class */ (function () {
+    function AppModule() {
+    }
+    AppModule = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["I" /* NgModule */])({
+            declarations: [
+                __WEBPACK_IMPORTED_MODULE_8__app_component__["a" /* MyApp */],
+            ],
+            imports: [
+                __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
+                __WEBPACK_IMPORTED_MODULE_5__angular_common_http__["b" /* HttpClientModule */],
+                __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["c" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_8__app_component__["a" /* MyApp */], {}, {
+                    links: [
+                        { loadChildren: '../pages/ai/ai.module#AiPageModule', name: 'AiPage', segment: 'ai', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/book/book.module#BookPageModule', name: 'BookPage', segment: 'book', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] }
+                    ]
+                }),
+                __WEBPACK_IMPORTED_MODULE_3__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
+            ],
+            bootstrap: [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* IonicApp */]],
+            entryComponents: [
+                __WEBPACK_IMPORTED_MODULE_8__app_component__["a" /* MyApp */]
+            ],
+            providers: [
+                __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__["a" /* StatusBar */],
+                { provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["u" /* ErrorHandler */], useClass: __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["b" /* IonicErrorHandler */] },
+                __WEBPACK_IMPORTED_MODULE_9__providers_painter_painter__["a" /* PainterProvider */],
+                __WEBPACK_IMPORTED_MODULE_10__providers_http_http__["a" /* HttpProvider */],
+                __WEBPACK_IMPORTED_MODULE_11__providers_code_code__["a" /* CodeProvider */],
+                __WEBPACK_IMPORTED_MODULE_12__providers_view_as_view_as__["a" /* ViewAsProvider */],
+                __WEBPACK_IMPORTED_MODULE_13__providers_sentence_sentence__["a" /* SentenceProvider */],
+                __WEBPACK_IMPORTED_MODULE_14__providers_knowledge_knowledge__["a" /* KnowledgeProvider */],
+                __WEBPACK_IMPORTED_MODULE_15__providers_rxjs_rxjs__["a" /* RxjsProvider */],
+                __WEBPACK_IMPORTED_MODULE_6__ionic_native_http__["a" /* HTTP */],
+                __WEBPACK_IMPORTED_MODULE_7__ionic_native_file__["a" /* File */]
+            ]
+        })
+    ], AppModule);
+    return AppModule;
+}());
+
+//# sourceMappingURL=app.module.js.map
+
+/***/ }),
+
+/***/ 283:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(203);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_http_http__ = __webpack_require__(104);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var MyApp = /** @class */ (function () {
+    function MyApp(platform, statusBar, http) {
+        var _this = this;
+        this.platform = platform;
+        this.statusBar = statusBar;
+        this.http = http;
+        this.rootPage = 'TabsPage';
+        this.items = [
+            {
+                icon: 'leaf',
+                name: '个人主页',
+                page: 'PersonPage',
+            },
+            {
+                icon: 'shirt',
+                name: '个性装扮',
+                page: 'DressPage',
+            },
+            {
+                icon: 'star',
+                name: '我的收藏',
+                page: 'StarPage',
+            },
+            {
+                icon: 'photos',
+                name: '我的相册',
+                page: 'PhotoPage',
+            },
+            {
+                icon: 'folder',
+                name: '我的文件',
+                page: 'FolderPage',
+            },
+        ];
+        platform.ready().then(function () {
+            _this.http.checkUpdate();
+        });
+    }
+    MyApp = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({template:/*ion-inline-start:"C:\Users\Linka\Desktop\teach\ionic3\src\app\app.html"*/'<ion-menu [content]="content">\n	<ion-content>\n		<div class="bg"></div>\n		<ion-list no-lines>\n			<ion-list-header>\n				菜单\n			</ion-list-header>\n			<button ion-item menuClose *ngFor="let item of items">\n				<ion-icon [name]="item.icon" item-start></ion-icon>{{item.name}}\n			</button>\n		</ion-list>\n	</ion-content>\n</ion-menu>\n<ion-nav [root]="rootPage" #content></ion-nav>'/*ion-inline-end:"C:\Users\Linka\Desktop\teach\ionic3\src\app\app.html"*/,
+            animations: []
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */],
+            __WEBPACK_IMPORTED_MODULE_3__providers_http_http__["a" /* HttpProvider */]])
+    ], MyApp);
+    return MyApp;
+}());
+
+//# sourceMappingURL=app.component.js.map
+
+/***/ }),
+
+/***/ 50:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SentenceProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__knowledge_knowledge__ = __webpack_require__(51);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var SentenceProvider = /** @class */ (function () {
+    function SentenceProvider(knowledge) {
+        this.knowledge = knowledge;
+    }
+    SentenceProvider.prototype.receiveJson = function (json) {
+        this.json = json;
+    };
+    //判断类型
+    SentenceProvider.prototype.getHED = function () {
+        var HED = this.json.filter(function (i) {
+            return i.head == 0;
+        });
+        return HED;
+    };
+    SentenceProvider.prototype.getParent = function (item) {
+        var parent = this.json.filter(function (i) {
+            return i.id == item.head;
+        });
+        return parent;
+    };
+    SentenceProvider.prototype.getChildren = function (item, deprel, postag) {
+        var children = this.json.filter(function (i) {
+            if (i.head != item.id)
+                return false;
+            if (deprel && deprel != i.deprel)
+                return false;
+            if (postag && postag != i.postag)
+                return false;
+            return true;
+        });
+        return children;
+    };
+    SentenceProvider.prototype.getSibling = function (item) {
+        var sibling = this.getChildren(item).filter(function (i) {
+            return i.deprel == "COO";
+        });
+        return sibling;
+    };
+    SentenceProvider.prototype.getDeprel = function (deprel, array) {
+        if (array === void 0) { array = this.json; }
+        var result = array.filter(function (i) {
+            return i.deprel == deprel;
+        });
+        return result;
+    };
+    SentenceProvider.prototype.getFilter = function (deprel, postag) {
+        var filter = this.json.filter(function (i) {
+            return i.deprel == deprel && i.postag == postag;
+        });
+        return filter;
+    };
+    SentenceProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__knowledge_knowledge__["a" /* KnowledgeProvider */]])
+    ], SentenceProvider);
+    return SentenceProvider;
+}());
+
+//# sourceMappingURL=sentence.js.map
+
+/***/ }),
+
+/***/ 51:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return KnowledgeProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__rxjs_rxjs__ = __webpack_require__(105);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var KnowledgeProvider = /** @class */ (function () {
+    function KnowledgeProvider(rxjs) {
+        this.rxjs = rxjs;
+        this.typeList = {
+            suit: ['club', 'diamond', 'heart', 'spade'],
+            color: ['red', 'black'],
+            position: ['h', 'e', 'he'],
+        };
+        this.replaceList = [
+            {
+                reg: "【[\u4e00-\u9fa5]+】",
+                replacement: '扑克',
+            }, {
+                reg: "梅花|草花|方块|方片|红桃|黑桃",
+                replacement: '花色',
+            }
+        ];
+        this.translationList = {
+            "一": "1",
+            "两/二": 2,
+            "三": 3,
+            "四": 4,
+            "五": 5,
+            "六": 6,
+            "七": 7,
+            "使用": 'chooseToUse',
+            "打出": "chooseToRespond",
+            "和/与": '&&',
+            "非": '!',
+            "红色": 'red',
+            "黑色": 'black',
+            "梅花/草花": 'club',
+            "方块/方片": 'diamond',
+            "红桃": 'heart',
+            "黑桃": 'spade',
+            "杀": 'sha',
+            "闪": "shan",
+            "桃": 'tao',
+            "万箭齐发": 'wanjian',
+            "装备": 'e',
+            "判定": 'j',
+            "手": 'h',
+        };
+    }
+    KnowledgeProvider.prototype.getType = function (word) {
+        var w;
+        if (/[\u4e00-\u9fa5]+/.test(word))
+            w = this.getTranslation(word);
+        else
+            w = word;
+        for (var i in this.typeList) {
+            if (this.typeList[i].includes(w))
+                return i;
+        }
+    };
+    KnowledgeProvider.prototype.getTranslation = function (word) {
+        for (var i in this.translationList) {
+            if (i == word || (i.indexOf("/") != -1 && i.indexOf(word) != -1))
+                return this.translationList[i];
+        }
+        console.error("\u554A\u54C8\uFF0C\u6CA1\u6709\u627E\u5230\u3010" + word + "\u3011\u7684\u7FFB\u8BD1...");
+        this.rxjs.sendMessage("\u554A\u54C8\uFF0C\u6CA1\u6709\u627E\u5230\u3010" + word + "\u3011\u7684\u7FFB\u8BD1...");
+        return word;
+    };
+    KnowledgeProvider.prototype.getReplace = function (msg) {
+        var newMsg = msg;
+        this.replaceList.map(function (i) {
+            newMsg = newMsg.replace(new RegExp(i.reg, "g"), i.replacement + ' ');
+        });
+        return newMsg;
+    };
+    KnowledgeProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__rxjs_rxjs__["a" /* RxjsProvider */]])
+    ], KnowledgeProvider);
+    return KnowledgeProvider;
+}());
+
+//# sourceMappingURL=knowledge.js.map
+
+/***/ })
+
+},[206]);
+//# sourceMappingURL=main.js.map

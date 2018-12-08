@@ -18,8 +18,13 @@ export class HttpProvider {
 		public mhttp:HTTP,
 		private file: File,
 	) {}
-	get() { 
-
+	get(url) { 
+		this.mhttp.get(url,{},{}).then(res=>{
+			console.log(res);
+			res.data=JSON.parse(res.data);
+			console.log(res.data);
+			
+		})
 	}
 	post(text) {
 		var url;
@@ -46,9 +51,8 @@ export class HttpProvider {
 		}
 	}
 	checkUpdate(){
-		var u=document.createElement('script');
-		u.src="https://raw.githubusercontent.com/q2578443177/AI/master/update.js";
-		document.head.appendChild(u);
+		var url="https://raw.githubusercontent.com/q2578443177/AI/master/update.js";
+		this.get(url);
 
 	}
 	downloadFile(fileName){

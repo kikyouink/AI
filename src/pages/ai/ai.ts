@@ -8,7 +8,6 @@ import { SentenceProvider } from "../../providers/sentence/sentence"
 import { KnowledgeProvider } from "../../providers/knowledge/knowledge"
 import { RxjsProvider } from "../../providers/rxjs/rxjs";
 import { ToastController } from 'ionic-angular';
-import { SyncProvider } from "../../providers/sync/sync";
 
 import VConsole from 'vconsole';
 let v = new VConsole();
@@ -57,7 +56,6 @@ export class AiPage {
 		public knowledge: KnowledgeProvider,
 		public rxjs: RxjsProvider,
 		public toastCtrl: ToastController,
-		public sync: SyncProvider,
 	) { }
 	ionViewDidLoad() {
 		this.initRxjs();
