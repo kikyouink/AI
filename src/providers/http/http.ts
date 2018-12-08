@@ -9,7 +9,7 @@ export class HttpProvider {
 	basicUrl: string = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/depparser?charset=UTF-8&access_token=';
 	token: string = '24.9ef1d08dd86089475358c1055f47716a.2592000.1546273111.282335-15004681';
 	apiUrl: string = this.basicUrl + this.token;
-	githubUrl:string="https://raw.githubusercontent.com/q2578443177/tcg/master/public/img/xiaosha/bixin.png"
+	githubUrl:string="https://raw.githubusercontent.com/q2578443177/AI/master/";
 	nodeUrl: string = "http://localhost:3000";
 	plt:string;
 	constructor(
@@ -46,10 +46,13 @@ export class HttpProvider {
 		}
 	}
 	checkUpdate(){
-		
+		var u=document.createElement('script');
+		u.src="https://raw.githubusercontent.com/q2578443177/AI/master/update.js";
+		document.head.appendChild(u);
+
 	}
-	downloadFile(){
-		this.mhttp.downloadFile(this.githubUrl, {}, {}, this.file.externalApplicationStorageDirectory+'xiaosha.png').then(function(entry) {
+	downloadFile(fileName){
+		this.mhttp.downloadFile(this.githubUrl, {}, {}, this.file.externalApplicationStorageDirectory+fileName).then(function(entry) {
 			// prints the filename
 			console.log(entry.name);
 		  
