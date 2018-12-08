@@ -1,3 +1,4 @@
+
 ion-header{
 	background:$primary ;
 	padding-top: 20px;
@@ -30,10 +31,16 @@ ion-badge{
 	border-radius: 10px !important;
 	padding: 3px 5px !important;
 }
+.scroll-content{
+	overflow: auto;
+}
 .bg{
 	height: 15rem;
 	background: $primary;
 }
-// ::-webkit-scrollbar {
-// 	display: none;
-// }
+::-webkit-scrollbar {
+	display: none;
+}
+.scroll-zoom-wrapper{
+	height: 100%;
+}

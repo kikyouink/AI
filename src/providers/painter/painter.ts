@@ -17,7 +17,7 @@ export class PainterProvider {
 	}
 	resize(canvas, parent) {
 		canvas.width = parent.offsetWidth;
-		canvas.height = parent.offsetHeight;
+		// canvas.height = parent.offsetHeight; 
 	}
 	draw(canvas, x1, x2, x3) {
 		var y1, y2, y3;

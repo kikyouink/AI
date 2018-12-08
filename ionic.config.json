@@ -1,6 +1,8 @@
 {
 	"name": "go",
-	"integrations": {},
+	"integrations": {
+		"cordova": {}
+	},
 	"type": "ionic-angular",
 	"proxies": [
 		{

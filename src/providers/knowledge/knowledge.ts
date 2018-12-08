@@ -65,7 +65,6 @@ export class KnowledgeProvider {
 		return word;
 	}
 	getReplace(msg) {
-		debugger;
 		var newMsg = msg;
 		this.replaceList.map((i)=>{
 			newMsg = newMsg.replace(new RegExp(i.reg, "g"), i.replacement + ' ');

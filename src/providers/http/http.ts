@@ -1,36 +1,46 @@
+import { Platform } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HTTP } from '@ionic-native/http';
 
-/*
-  Generated class for the HttpProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class HttpProvider {
-	basicUrl: string = '/rpc/2.0/nlp/v1/depparser?charset=UTF-8&access_token=';
+	basicUrl: string = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/depparser?charset=UTF-8&access_token=';
 	token: string = '24.9ef1d08dd86089475358c1055f47716a.2592000.1546273111.282335-15004681';
 	apiUrl: string = this.basicUrl + this.token;
 	nodeUrl: string = "http://localhost:3000";
-	constructor(public http: HttpClient) {
-		console.log('Hello HttpProvider Provider');
-	}
-	get(){
+	plt:string;
+	constructor(
+		public platform:Platform,
+		public http:HttpClient,
+		public mhttp:HTTP
+	) {}
+	get() { 
 
 	}
-	post(text){
-		// var url = this.apiUrl;
-		var url = this.nodeUrl; 
+	post(text) {
+		var url;
 		var body = {
 			"text": text
 		}
-		var options = {
-			headers: {
-				'Content-Type': 'application/json',
-			},
+		var options;
+		if(this.platform.is('android')){
+			url = this.apiUrl; 
+			options = {
+				'Content-Type': 'application/json;charset=utf-8',
+			}
+			this.mhttp.setDataSerializer('json');
+			return this.mhttp.post(url, body, options)
 		}
-		return this.http.post(url, body, options)
+		else{
+			url = this.nodeUrl;
+			options = {
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			}
+			return this.http.post(url, body, options)
+		}
 	}
 
 }

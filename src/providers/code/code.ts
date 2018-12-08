@@ -17,6 +17,7 @@ export class CodeProvider {
 	create(json) {
 		console.log('coding...');
 		var type = this.judgeType(json);
+		console.log(json);
 		switch (type) {
 			case "viewAs": this.viewAs.start(); break;
 			// case "enable": this.enable.compile(json); break;
