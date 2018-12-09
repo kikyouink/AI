@@ -1,14 +1,14 @@
 webpackJsonp([0],{
 
-/***/ 284:
+/***/ 286:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AiPageModule", function() { return AiPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ai__ = __webpack_require__(287);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ai__ = __webpack_require__(289);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -27,7 +27,7 @@ var AiPageModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_2__ai__["a" /* AiPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__ai__["a" /* AiPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__ai__["a" /* AiPage */]),
             ],
         })
     ], AiPageModule);
@@ -38,21 +38,21 @@ var AiPageModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 287:
+/***/ 289:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AiPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_animations__ = __webpack_require__(103);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_painter_painter__ = __webpack_require__(204);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_http_http__ = __webpack_require__(104);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_code_code__ = __webpack_require__(205);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_sentence_sentence__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_knowledge_knowledge__ = __webpack_require__(51);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_rxjs_rxjs__ = __webpack_require__(105);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_vconsole__ = __webpack_require__(288);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_animations__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_painter_painter__ = __webpack_require__(206);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_http_http__ = __webpack_require__(105);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_code_code__ = __webpack_require__(207);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_sentence_sentence__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_knowledge_knowledge__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_rxjs_rxjs__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_vconsole__ = __webpack_require__(290);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_vconsole___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_vconsole__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -73,10 +73,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
 var v = new __WEBPACK_IMPORTED_MODULE_9_vconsole___default.a();
 var AiPage = /** @class */ (function () {
-    function AiPage(navCtrl, navParams, platform, http, painter, code, sentence, knowledge, rxjs, toastCtrl) {
+    function AiPage(navCtrl, navParams, platform, http, painter, code, sentence, knowledge, rxjs) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.platform = platform;
@@ -86,29 +85,15 @@ var AiPage = /** @class */ (function () {
         this.sentence = sentence;
         this.knowledge = knowledge;
         this.rxjs = rxjs;
-        this.toastCtrl = toastCtrl;
         this.loading = false;
         this.received = false;
     }
     AiPage.prototype.ionViewDidLoad = function () {
-        this.initRxjs();
-        this.checkUpdate();
-    };
-    AiPage.prototype.initRxjs = function () {
-        var _this = this;
-        this.rxjs
-            .getMessage().subscribe(function (message) {
-            console.log(message.text);
-            _this.presentToast(message.text);
-        });
-    };
-    AiPage.prototype.checkUpdate = function () {
     };
     AiPage.prototype.e = function (i) {
         return i._elementRef.nativeElement;
     };
     AiPage.prototype.prepareData = function () {
-        console.log(this.platform.dir());
         this.plt = this.platform.is('android') ? 'm' : 'web';
         this.loading = true;
         this.canvas = this.canvasE.nativeElement;
@@ -116,10 +101,10 @@ var AiPage = /** @class */ (function () {
         this.btnBox = this.btnBoxE.nativeElement;
         this.painter.clear(this.canvas);
         this.text.nativeElement.blur();
+        this.getData();
     };
     AiPage.prototype.getData = function () {
         var _this = this;
-        this.prepareData();
         var data;
         var type = this.plt == 'm' ? 'then' : 'subscribe';
         var msg = this.text.nativeElement.textContent;
@@ -190,28 +175,21 @@ var AiPage = /** @class */ (function () {
         }
         return sourceCopy;
     };
-    AiPage.prototype.presentToast = function (message) {
-        var toast = this.toastCtrl.create({
-            message: message,
-            duration: 3000
-        });
-        toast.present();
-    };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_8" /* ViewChild */])('mix'),
-        __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* ElementRef */]) === "function" && _a || Object)
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* ElementRef */])
     ], AiPage.prototype, "mixE", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_8" /* ViewChild */])('text'),
-        __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* ElementRef */]) === "function" && _b || Object)
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* ElementRef */])
     ], AiPage.prototype, "text", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_8" /* ViewChild */])('canvas'),
-        __metadata("design:type", typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* ElementRef */]) === "function" && _c || Object)
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* ElementRef */])
     ], AiPage.prototype, "canvasE", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_8" /* ViewChild */])('btnBox'),
-        __metadata("design:type", typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* ElementRef */]) === "function" && _d || Object)
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* ElementRef */])
     ], AiPage.prototype, "btnBoxE", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_9" /* ViewChildren */])('button'),
@@ -219,7 +197,7 @@ var AiPage = /** @class */ (function () {
     ], AiPage.prototype, "buttons", void 0);
     AiPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-ai',template:/*ion-inline-start:"C:\Users\Linka\Desktop\teach\ionic3\src\pages\ai\ai.html"*/'<ion-header>\n\n	<ion-navbar>\n		<button ion-button menuToggle>\n			<ion-icon name="menu"></ion-icon>\n		</button>\n		<ion-title>AI</ion-title>\n	</ion-navbar>\n\n</ion-header>\n\n<ion-content padding>\n\n	<ion-card>\n		<ion-card-content>\n			<div class="text" contenteditable="true" text-center #text>你可以将一张方块手牌当【杀】使用或打出</div>\n			<ion-scroll  scrollX="true" class="mix" #mix [hidden]="!received" [@fade]="received?\'show\':\'hide\'">\n				<canvas #canvas height="160"></canvas>\n				<div class="buttons" #btnBox>\n					<button ion-button round small #button *ngFor="let item of paragraph" (click)="skip(item.head)" [color]="item.head==0?\'danger\':\'primary\'" [attr.data-postag]="item.postag" [attr.data-head]="item.head" [attr.data-id]="item.id" [attr.data-deprel]="item.deprel">\n						{{item.word}}\n						<ion-badge color="danger">{{item.deprel}}</ion-badge>\n					</button>\n				</div>\n			</ion-scroll>\n		</ion-card-content>\n	</ion-card>\n	\n	<button ion-button (click)="getData()" full round>\n		<span *ngIf="!loading">发送</span>\n		<ion-spinner *ngIf="loading" name="crescent"></ion-spinner>\n	</button>\n	<img src="../../assets/imgs/1.jpg" alt="">\n	\n</ion-content>'/*ion-inline-end:"C:\Users\Linka\Desktop\teach\ionic3\src\pages\ai\ai.html"*/,
+            selector: 'page-ai',template:/*ion-inline-start:"C:\Users\Linka\Desktop\teach\ionic3\src\pages\ai\ai.html"*/'<ion-header>\n\n	<ion-navbar>\n		<button ion-button menuToggle>\n			<ion-icon name="menu"></ion-icon>\n		</button>\n		<ion-title>AI</ion-title>\n	</ion-navbar>\n\n</ion-header>\n\n<ion-content padding>\n\n	<ion-card>\n		<ion-card-content>\n			<div class="text" contenteditable="true" text-center #text>你可以将一张方块手牌当【杀】使用或打出</div>\n			<ion-scroll  scrollX="true" class="mix" #mix [hidden]="!received" [@fade]="received?\'show\':\'hide\'">\n				<canvas #canvas height="160"></canvas>\n				<div class="buttons" #btnBox>\n					<button ion-button round small #button *ngFor="let item of paragraph" (click)="skip(item.head)" [color]="item.head==0?\'danger\':\'primary\'" [attr.data-postag]="item.postag" [attr.data-head]="item.head" [attr.data-id]="item.id" [attr.data-deprel]="item.deprel">\n						{{item.word}}\n						<ion-badge color="danger">{{item.deprel}}</ion-badge>\n					</button>\n				</div>\n			</ion-scroll>\n		</ion-card-content>\n	</ion-card>\n	\n	<button ion-button (click)="prepareData()" full round>\n		<span *ngIf="!loading">发送</span>\n		<ion-spinner *ngIf="loading" name="crescent"></ion-spinner>\n	</button>\n	\n</ion-content>'/*ion-inline-end:"C:\Users\Linka\Desktop\teach\ionic3\src\pages\ai\ai.html"*/,
             animations: [
                 Object(__WEBPACK_IMPORTED_MODULE_1__angular_animations__["j" /* trigger */])('fade', [
                     Object(__WEBPACK_IMPORTED_MODULE_1__angular_animations__["g" /* state */])('show', Object(__WEBPACK_IMPORTED_MODULE_1__angular_animations__["h" /* style */])({
@@ -236,27 +214,24 @@ var AiPage = /** @class */ (function () {
                 ])
             ],
         }),
-        __metadata("design:paramtypes", [typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* NavController */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* NavParams */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["g" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["g" /* Platform */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_4__providers_http_http__["a" /* HttpProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__providers_http_http__["a" /* HttpProvider */]) === "function" && _h || Object, typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_3__providers_painter_painter__["a" /* PainterProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_painter_painter__["a" /* PainterProvider */]) === "function" && _j || Object, typeof (_k = typeof __WEBPACK_IMPORTED_MODULE_5__providers_code_code__["a" /* CodeProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__providers_code_code__["a" /* CodeProvider */]) === "function" && _k || Object, typeof (_l = typeof __WEBPACK_IMPORTED_MODULE_6__providers_sentence_sentence__["a" /* SentenceProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__providers_sentence_sentence__["a" /* SentenceProvider */]) === "function" && _l || Object, typeof (_m = typeof __WEBPACK_IMPORTED_MODULE_7__providers_knowledge_knowledge__["a" /* KnowledgeProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__providers_knowledge_knowledge__["a" /* KnowledgeProvider */]) === "function" && _m || Object, typeof (_o = typeof __WEBPACK_IMPORTED_MODULE_8__providers_rxjs_rxjs__["a" /* RxjsProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_8__providers_rxjs_rxjs__["a" /* RxjsProvider */]) === "function" && _o || Object, typeof (_p = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* ToastController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* ToastController */]) === "function" && _p || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["g" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_4__providers_http_http__["a" /* HttpProvider */],
+            __WEBPACK_IMPORTED_MODULE_3__providers_painter_painter__["a" /* PainterProvider */],
+            __WEBPACK_IMPORTED_MODULE_5__providers_code_code__["a" /* CodeProvider */],
+            __WEBPACK_IMPORTED_MODULE_6__providers_sentence_sentence__["a" /* SentenceProvider */],
+            __WEBPACK_IMPORTED_MODULE_7__providers_knowledge_knowledge__["a" /* KnowledgeProvider */],
+            __WEBPACK_IMPORTED_MODULE_8__providers_rxjs_rxjs__["a" /* RxjsProvider */]])
     ], AiPage);
     return AiPage;
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
 }());
 
-var p = {
-    draw: function () {
-        console.log('draw');
-    },
-    da: function () {
-        console.log('da');
-    }
-};
-var b = "da";
-p[b]();
 //# sourceMappingURL=ai.js.map
 
 /***/ }),
 
-/***/ 288:
+/***/ 290:
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!

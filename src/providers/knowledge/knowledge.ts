@@ -61,7 +61,7 @@ export class KnowledgeProvider {
 			if (i == word || (i.indexOf("/") != -1 && i.indexOf(word) != -1)) return this.translationList[i];
 		}
 		console.error(`啊哈，没有找到【${word}】的翻译...`);
-		this.rxjs.sendMessage(`啊哈，没有找到【${word}】的翻译...`);
+		this.rxjs.sendMsg(`啊哈，没有找到【${word}】的翻译...`);
 		return word;
 	}
 	getReplace(msg) {

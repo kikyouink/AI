@@ -1,7 +1,9 @@
 import { Component, HostBinding } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
+import { AppMinimize } from '@ionic-native/app-minimize';
 import { HttpProvider } from '../providers/http/http';
+import { RxjsProvider } from '../providers/rxjs/rxjs';
 
 @Component({
 	templateUrl: 'app.html',
@@ -40,10 +42,18 @@ export class MyApp {
 	constructor(
 		public platform: Platform,
 		public statusBar: StatusBar,
-		public http:HttpProvider,
+		public http: HttpProvider,
+		public appMinimize: AppMinimize,
+		public rxjs: RxjsProvider,
 	) {
 		platform.ready().then(() => {
-			this.http.checkUpdate();
+			if (this.platform.is('android')) {
+				this.http.checkUpdate();
+				platform.registerBackButtonAction(() => {
+					this.appMinimize.minimize();
+				});
+			}
+			this.rxjs.listening();
 		});
 	}
 }

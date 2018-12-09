@@ -6,6 +6,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { HttpClientModule } from '@angular/common/http';
 import { HTTP } from '@ionic-native/http';
 import { File } from '@ionic-native/file';
+import { AppMinimize } from '@ionic-native/app-minimize';
+import { FileOpener } from '@ionic-native/file-opener';
 
 import { MyApp } from './app.component';
 import { PainterProvider } from '../providers/painter/painter';
@@ -41,7 +43,9 @@ import { RxjsProvider } from '../providers/rxjs/rxjs';
     KnowledgeProvider,
     RxjsProvider,
 	HTTP,
-	File
+	File,
+	AppMinimize,
+	FileOpener
   ]
 })
 export class AppModule {}

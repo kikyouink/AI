@@ -1,13 +1,12 @@
 import { Component, ViewChild, ViewChildren, ElementRef } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-import { IonicPage, NavController, NavParams,Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { PainterProvider } from "../../providers/painter/painter";
 import { HttpProvider } from "../../providers/http/http";
 import { CodeProvider } from "../../providers/code/code";
 import { SentenceProvider } from "../../providers/sentence/sentence"
 import { KnowledgeProvider } from "../../providers/knowledge/knowledge"
 import { RxjsProvider } from "../../providers/rxjs/rxjs";
-import { ToastController } from 'ionic-angular';
 
 import VConsole from 'vconsole';
 let v = new VConsole();
@@ -41,58 +40,45 @@ export class AiPage {
 	loading: boolean = false;
 	received: boolean = false;
 	paragraph: any;
-	plt:string;
+	plt: string;
 	canvas: HTMLCanvasElement;
 	mix: HTMLDivElement;
 	btnBox: HTMLDivElement;
 	constructor(
 		public navCtrl: NavController,
 		public navParams: NavParams,
-		public platform:Platform,
+		public platform: Platform,
 		public http: HttpProvider,
 		public painter: PainterProvider,
 		public code: CodeProvider,
 		public sentence: SentenceProvider,
 		public knowledge: KnowledgeProvider,
 		public rxjs: RxjsProvider,
-		public toastCtrl: ToastController,
+
 	) { }
 	ionViewDidLoad() {
-		this.initRxjs();
-		this.checkUpdate();
-	}
-	initRxjs() {
-		this.rxjs
-			.getMessage().subscribe(message => {
-				console.log(message.text);
-				this.presentToast(message.text)
-			});
-	}
-	checkUpdate() {
-
 	}
 	e(i) {
 		return i._elementRef.nativeElement
 	}
-	prepareData(){
-		console.log(this.platform.dir())
-		this.plt=this.platform.is('android')?'m':'web';
+	prepareData() {
+		this.plt = this.platform.is('android') ? 'm' : 'web';
 		this.loading = true;
 		this.canvas = this.canvasE.nativeElement;
 		this.mix = this.mixE.nativeElement;
 		this.btnBox = this.btnBoxE.nativeElement;
 		this.painter.clear(this.canvas);
 		this.text.nativeElement.blur();
+		this.getData();
 	}
 	getData() {
-		this.prepareData();
 		var data;
-		var type=this.plt=='m'?'then':'subscribe';
+		var type = this.plt == 'm' ? 'then' : 'subscribe';
 		var msg = this.text.nativeElement.textContent;
 		msg = this.knowledge.getReplace(msg);
 		this.http.post(msg)[type](res => {
-			if(this.plt=='m') data=JSON.parse(res.data);
-			else data=res;
+			if (this.plt == 'm') data = JSON.parse(res.data);
+			else data = res;
 			console.log(data);
 			var p = this.deepCopy(data["items"]);
 			// this.paragraph = this.knowledge.getRestore(p);
@@ -148,23 +134,5 @@ export class AiPage {
 		}
 		return sourceCopy;
 	}
-	presentToast(message) {
-		const toast = this.toastCtrl.create({
-			message: message,
-			duration: 3000
-		});
-		toast.present();
-	}
 
 }
-var p={
-	draw(){
-		console.log('draw');
-		
-	},
-	da(){
-		console.log('da');
-	}
-}
-var b="da"
-p[b]()
