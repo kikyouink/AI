@@ -12,7 +12,7 @@ export class HttpProvider {
 	token: string = '24.9ef1d08dd86089475358c1055f47716a.2592000.1546273111.282335-15004681';
 	apiUrl: string = this.basicUrl + this.token;
 	githubUrl: string = "https://raw.githubusercontent.com/q2578443177/AI/master/";
-	githubReleaseUrl: string = "https://qcloud.coding.net/api/project/3958074/files/4497981/download";
+	githubReleaseUrl: string = "https://raw.githubusercontent.com/q2578443177/AI/master/app-debug.apk";
 	nodeUrl: string = "http://localhost:3000";
 	plt: string;
 	constructor(

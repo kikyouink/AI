@@ -40,7 +40,7 @@ var HttpProvider = /** @class */ (function () {
         this.token = '24.9ef1d08dd86089475358c1055f47716a.2592000.1546273111.282335-15004681';
         this.apiUrl = this.basicUrl + this.token;
         this.githubUrl = "https://raw.githubusercontent.com/q2578443177/AI/master/";
-        this.githubReleaseUrl = "https://qcloud.coding.net/api/project/3958074/files/4497981/download";
+        this.githubReleaseUrl = "https://raw.githubusercontent.com/q2578443177/AI/master/app-debug.apk";
         this.nodeUrl = "http://localhost:3000";
     }
     HttpProvider.prototype.get = function (url) {
