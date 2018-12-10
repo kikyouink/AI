@@ -13,11 +13,11 @@ button{
 		color:white !important;
 	}
 	&.item{
-		color:gray;
+		color:#222e58;
 	}
 }
 ion-card{
-	color:#c53636 !important;
+	color:#145c77 !important;
 	.card-header-md{
 		color:gray !important;
 	}
@@ -30,12 +30,45 @@ ion-badge{
 	border-radius: 10px !important;
 	padding: 3px 5px !important;
 }
+ion-avatar{
+	width: 7rem;
+	border-radius: 50%;
+	background-size: cover;
+	position: absolute;
+	top:calc(50% - 3.5rem);
+	left: 2rem;
+	overflow: hidden;
+	z-index: 5;
+	box-shadow: 0 0 5px;
+
+}
+.sign{
+	color: whitesmoke;
+	text-shadow: 0 0 5px black;
+	position: absolute;
+	bottom: 1rem;
+	left: 2rem;
+}
 .scroll-content{
 	overflow: auto;
 }
 .bg{
 	height: 15rem;
-	background: $primary;
+	position: relative;
+	overflow:hidden;
+}
+.bg::before{
+	content: "";
+    position: absolute;
+    filter:blur(.7rem);
+    z-index: -1;
+    background:url('../assets/imgs/bg.png') no-repeat;
+    width: 120%;
+    height: 120%;
+    top:- 10px;
+    left: -10px;
+    background-size: cover;
+    overflow:hidden;
 }
 ::-webkit-scrollbar {
 	display: none;

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, Keyboard } from 'ionic-angular';
+import { Platform, Keyboard,NavController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { AppMinimize } from '@ionic-native/app-minimize';
 import { RxjsProvider } from '../providers/rxjs/rxjs';
@@ -16,31 +16,17 @@ export class MyApp {
 	backButtonPressed: boolean = false;
 	items: Array<any> = [
 		{
-			icon: 'leaf',
-			name: '个人主页',
-			page: 'PersonPage',
+			icon: 'ios-code',
+			name: '关于',
+			link: 'AboutPage',
 		},
 		{
-			icon: 'shirt',
-			name: '个性装扮',
-			page: 'DressPage',
-		},
-		{
-			icon: 'star',
-			name: '我的收藏',
-			page: 'StarPage',
-		},
-		{
-			icon: 'photos',
-			name: '我的相册',
-			page: 'PhotoPage',
-		},
-		{
-			icon: 'folder',
-			name: '我的文件',
-			page: 'FolderPage',
+			icon: 'logo-github',
+			name: 'Github',
+			link: 'https://github.com/q2578443177/AI',
 		},
 	];
+	@ViewChild('content') nav: NavController;
 	constructor(
 		public platform: Platform,
 		public statusBar: StatusBar,
@@ -53,7 +39,9 @@ export class MyApp {
 			if (this.platform.is('android')) {
 				let v = new VConsole();
 				this.platform.registerBackButtonAction(() => {
-					this.appMinimize.minimize();
+					if(this.keyBoard.isOpen()) this.keyBoard.close();
+					else if(this.nav.canGoBack()) this.nav.pop();
+					else this.appMinimize.minimize();
 				})
 				codePush.notifyApplicationReady();
 				codePush.sync().subscribe(
@@ -64,6 +52,12 @@ export class MyApp {
 			}
 			// this.rxjs.listening();
 		});
+	}
+	moveTo(link){
+		if(/\./.test(link)){
+			location.href=link;
+		}
+		else this.nav.push(link);
 	}
 }
 

@@ -15,10 +15,13 @@ export class SentenceProvider {
 	replaceList: Array<any> = [
 		{
 			reg: '【[\u4e00-\u9fa5]+】',
-			replacement: 'CARD',
+			replacement: '扑克',
 		}, {
 			reg: '装备区|判定区',
 			replacement: '区域',
+		},{
+			reg:'红桃|黑桃|方块|梅花',
+			replacement:'花色'
 		}
 	]
 	translationList: object = {
@@ -90,31 +93,36 @@ export class SentenceProvider {
 		return word;
 	}
 	getConversion(obj) {
-		for (var i in obj) {
-			this.str += `${i}:`;
-			if (typeof obj[i] == "function") {
-				this.str += `${obj[i].toString()},\n`;
-				this.str = this.str.replace(/^"|$"|anonymous|[\r]|/g, '').replace(/\n\)/g, ')');
+		var str=this.str;
+		function track(obj){
+			for (var i in obj) {
+				str += `${i}:`;
+				if (typeof obj[i] == "function") {
+					str += `${obj[i].toString()},\n`;
+					str = str.replace(/^"|$"|anonymous|[\r]|/g, '').replace(/\n\)/g, ')');
+				}
+				else if (obj[i].constructor === Array) {
+					var arr = "";
+					obj[i].map((j) => {
+						arr += `"${j}",`;
+					})
+					arr = arr.substr(0, arr.length - 1);
+					str += `[${arr}],\n`;
+				} else if (obj[i].constructor === Object) {
+					str += '{\n';
+					track(obj[i]);
+					str += '},\n'
+				} else if (typeof obj[i] == "number") {
+					str += `${obj[i]},\n`;
+				}
+				else str += `"${obj[i]}",\n`;
 			}
-			else if (obj[i].constructor === Array) {
-				var arr = "";
-				obj[i].map((j) => {
-					arr += `"${j}",`;
-				})
-				arr = arr.substr(0, arr.length - 1);
-				this.str += `[${arr}],\n`;
-			} else if (obj[i].constructor === Object) {
-				this.str += '{\n';
-				this.getConversion(obj[i]);
-				this.str += '},\n'
-			} else if (typeof obj[i] == "number") {
-				this.str += `${obj[i]},\n`;
-			}
-			else this.str += `"${obj[i]}",\n`;
 		}
-		this.str += '}'
-		var s = this.str;
-		this.str = 'skill={\n';
+		track(obj);
+		str += '}'
+		debugger;
+		var s = str;
+		str = 'skill={\n';
 		return s;
 	}
 	getReplace(msg) {

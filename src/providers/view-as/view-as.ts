@@ -45,7 +45,7 @@ export class ViewAsProvider {
 		var j = filter.length;
 		while (j--) {
 			var [type, value] = [filter[j].type, filter[j].value];
-			main += `get.${type}(card)=='${value}'`;
+			main += `get.${type}(card)=="${value}"`;
 			if (j) main += `&&`;
 			else main += `;`;
 		}
@@ -92,13 +92,13 @@ export class ViewAsProvider {
 		}
 		console.log('视为:');
 		console.log(viewAs);
-		this.list.viewAs = viewAs;
+		this.list.viewAs = v;
 		return v;
 
 	}
 	getPrompt() {
 		var num = this.list['selectCard'] ? this.sentence.getTranslation(this.list['selectCard'], true) : 1;
-		var prompt = `将${num}张牌当做${this.sentence.getTranslation(this.list["viewAs"], true)}`;
+		var prompt = `将${num}张牌当做${this.sentence.getTranslation(this.list["viewAs"].name, true)}`;
 		if (typeof this.getWhen() == 'string') prompt += `使用`;
 		else prompt += `使用或打出`;
 		console.log('提示:');
@@ -115,6 +115,7 @@ export class ViewAsProvider {
 	//视为技
 	start() {
 		console.log('开始编写视为技');
+		this.list={};
 		this.getWhen();
 		this.getFilterCard();
 		this.getSelectCard()

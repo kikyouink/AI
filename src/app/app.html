@@ -1,11 +1,16 @@
 <ion-menu [content]="content">
 	<ion-content>
-		<div class="bg"></div>
-		<ion-list no-lines>
+		<div class="bg">
+			<ion-avatar>
+				<img src="../assets/imgs/avatar.png">
+			</ion-avatar>
+			<div class="sign" contenteditable="true">请设置你的签名~</div>
+		</div>
+		<ion-list>
 			<ion-list-header>
 				菜单
 			</ion-list-header>
-			<button ion-item menuClose *ngFor="let item of items">
+			<button ion-item menuClose *ngFor="let item of items" (click)="moveTo(item.link)">
 				<ion-icon [name]="item.icon" item-start></ion-icon>{{item.name}}
 			</button>
 		</ion-list>
