@@ -1,9 +1,10 @@
-import { Component, HostBinding } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { Platform, Keyboard } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { AppMinimize } from '@ionic-native/app-minimize';
-import { HttpProvider } from '../providers/http/http';
 import { RxjsProvider } from '../providers/rxjs/rxjs';
+import { CodePush } from '@ionic-native/code-push';
+import VConsole from 'vconsole';
 
 @Component({
 	templateUrl: 'app.html',
@@ -12,6 +13,7 @@ import { RxjsProvider } from '../providers/rxjs/rxjs';
 })
 export class MyApp {
 	rootPage: string = 'TabsPage';
+	backButtonPressed: boolean = false;
 	items: Array<any> = [
 		{
 			icon: 'leaf',
@@ -42,18 +44,25 @@ export class MyApp {
 	constructor(
 		public platform: Platform,
 		public statusBar: StatusBar,
-		public http: HttpProvider,
 		public appMinimize: AppMinimize,
 		public rxjs: RxjsProvider,
+		public codePush: CodePush,
+		public keyBoard: Keyboard,
 	) {
 		platform.ready().then(() => {
 			if (this.platform.is('android')) {
-				this.http.checkUpdate();
-				platform.registerBackButtonAction(() => {
+				let v = new VConsole();
+				this.platform.registerBackButtonAction(() => {
 					this.appMinimize.minimize();
-				});
+				})
+				codePush.notifyApplicationReady();
+				codePush.sync().subscribe(
+					(data) => { }, (err) => {
+						console.log('[codePush ERROR]: ' + err);
+					}
+				);
 			}
-			this.rxjs.listening();
+			// this.rxjs.listening();
 		});
 	}
 }

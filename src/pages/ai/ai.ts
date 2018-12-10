@@ -5,12 +5,9 @@ import { PainterProvider } from "../../providers/painter/painter";
 import { HttpProvider } from "../../providers/http/http";
 import { CodeProvider } from "../../providers/code/code";
 import { SentenceProvider } from "../../providers/sentence/sentence"
-import { KnowledgeProvider } from "../../providers/knowledge/knowledge"
 import { RxjsProvider } from "../../providers/rxjs/rxjs";
-
-import VConsole from 'vconsole';
-let v = new VConsole();
-
+import * as CodeMirror from 'codemirror/lib/codemirror'
+import 'codemirror/mode/javascript/javascript'
 @IonicPage()
 @Component({
 	selector: 'page-ai',
@@ -36,11 +33,23 @@ export class AiPage {
 	@ViewChild('text') text: ElementRef;
 	@ViewChild('canvas') canvasE: ElementRef;
 	@ViewChild('btnBox') btnBoxE: ElementRef;
+	@ViewChild('te') te: ElementRef;
 	@ViewChildren('button') buttons: any;
 	loading: boolean = false;
 	received: boolean = false;
+	done: boolean = false;
+	c: string;
 	paragraph: any;
+	CodeMirrorEditor: any;
 	plt: string;
+	config = {
+		mode: {
+			name: "javascript",
+			json: true,
+		},
+		theme: 'night',
+		indentUnit: 4,
+	}
 	canvas: HTMLCanvasElement;
 	mix: HTMLDivElement;
 	btnBox: HTMLDivElement;
@@ -52,16 +61,38 @@ export class AiPage {
 		public painter: PainterProvider,
 		public code: CodeProvider,
 		public sentence: SentenceProvider,
-		public knowledge: KnowledgeProvider,
 		public rxjs: RxjsProvider,
-
 	) { }
 	ionViewDidLoad() {
+		let myTextarea = this.te.nativeElement;
+		this.CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
+			mode: 'javascript',//编辑器语言
+			theme: 'mdn-like',
+			json: true,
+			extraKeys: { "Ctrl": "autocomplete" },//ctrl可以弹出选择项 
+			smartIndent: true,
+		});
+		this.rxjs.getMsg().subscribe(data => {
+			console.log(data);
+			if (data.msg.status && data.msg.status == 'done') {
+				this.done = true;
+				setTimeout(()=>{
+					this.c = this.sentence.getConversion(data.msg.code);
+					this.CodeMirrorEditor.setValue(this.c);
+					this.CodeMirrorEditor.refresh();
+				},200)
+				
+			}
+		})
+
 	}
 	e(i) {
-		return i._elementRef.nativeElement
+		return i._elementRef.nativeElement;
 	}
 	prepareData() {
+		var firstLine = this.CodeMirrorEditor.firstLine();
+		var lastLine = this.CodeMirrorEditor.lastLine();
+		this.CodeMirrorEditor.replaceRange('', { line: firstLine, ch: 0 }, { line: lastLine, ch: 0 });
 		this.plt = this.platform.is('android') ? 'm' : 'web';
 		this.loading = true;
 		this.canvas = this.canvasE.nativeElement;
@@ -70,23 +101,23 @@ export class AiPage {
 		this.painter.clear(this.canvas);
 		this.text.nativeElement.blur();
 		this.getData();
+
 	}
 	getData() {
 		var data;
 		var type = this.plt == 'm' ? 'then' : 'subscribe';
 		var msg = this.text.nativeElement.textContent;
-		msg = this.knowledge.getReplace(msg);
+		msg = this.sentence.getReplace(msg);
 		this.http.post(msg)[type](res => {
 			if (this.plt == 'm') data = JSON.parse(res.data);
 			else data = res;
 			console.log(data);
 			var p = this.deepCopy(data["items"]);
-			// this.paragraph = this.knowledge.getRestore(p);
-			this.paragraph = data["items"];
+			this.paragraph = this.sentence.getRestore(p);
 			this.loading = false;
 			this.received = true;
-			this.handleData(data["items"]);
-			this.sentence.receiveJson(data["items"]);
+			this.handleData(p);
+			this.sentence.receiveJson(p);
 		})
 	}
 	handleData(data) {
@@ -97,14 +128,12 @@ export class AiPage {
 				var child = this.e(i);
 				if (child.dataset.head != 0) {
 					var parent = this.findParent(child.dataset.head);
-					var start = this.getPoint(child);
-					var end = this.getPoint(parent);
-					var center = (start + end) / 2;
-					this.painter.draw(this.canvas, start, center, end);
+					this.painter.start(this.canvas, child, parent);
 				}
 			})
 			this.code.create(data);
 		}, 100);
+
 	}
 	skip(head) {
 		var parent = this.findParent(head);
@@ -118,12 +147,6 @@ export class AiPage {
 			return button.dataset.id == head;
 		});
 		return parent.length ? this.e(parent[0]) : null;
-	}
-	getPoint(button) {
-		var left = button.offsetLeft;
-		var width = button.offsetWidth;
-		var centerPoint = left + width / 2;
-		return centerPoint;
 	}
 	deepCopy(source, bool = true) {
 		var sourceCopy;

@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core';
 import {ViewAsProvider} from '../view-as/view-as'
 import {SentenceProvider} from "../sentence/sentence"
-/*
-  Generated class for the CodeProvider provider.
 
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class CodeProvider {
 	constructor(

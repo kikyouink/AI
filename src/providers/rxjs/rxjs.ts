@@ -13,7 +13,7 @@ export class RxjsProvider {
 		this.subject = new Subject<any>();
 	}
 
-	sendMsg(msg, type = "toast",callback?) {
+	sendMsg(msg, type?, callback?) {
 		this.subject.next({
 			msg: msg,
 			type: type,
@@ -28,14 +28,20 @@ export class RxjsProvider {
 	getMsg(): Observable<any> {
 		return this.subject.asObservable();
 	}
-	listening() {
-		this.getMsg().subscribe(data => {
-			if (data.type == "toast") {
-				this.presentToast(data.msg);
-			}
-			else this.showConfirm(data.msg, data.callback)
-		})
-	}
+	// listening() {
+	// 	this.subject.subscribe(data => {
+	// 		console.log('listen');
+			
+	// 		console.log(data);
+			
+	// 		if (data.type == "toast") {
+	// 			this.presentToast(data.msg);
+	// 		}
+	// 		else if (data.type == "alert") {
+	// 			this.showConfirm(data.msg, data.callback);
+	// 		}
+	// 	})
+	// }
 	presentToast(message) {
 		const toast = this.toastCtrl.create({
 			message: message,

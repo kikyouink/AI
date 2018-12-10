@@ -14,10 +14,11 @@
 	<ion-card>
 		<ion-card-content>
 			<div class="text" contenteditable="true" text-center #text>你可以将一张方块手牌当【杀】使用或打出</div>
-			<ion-scroll  scrollX="true" class="mix" #mix [hidden]="!received" [@fade]="received?'show':'hide'">
-				<canvas #canvas height="160"></canvas>
+			<ion-scroll scrollX="true" class="mix" #mix [hidden]="!received" [@fade]="received?'show':'hide'">
+				<canvas #canvas></canvas>
 				<div class="buttons" #btnBox>
-					<button ion-button round small #button *ngFor="let item of paragraph" (click)="skip(item.head)" [color]="item.head==0?'danger':'primary'" [attr.data-postag]="item.postag" [attr.data-head]="item.head" [attr.data-id]="item.id" [attr.data-deprel]="item.deprel">
+					<button ion-button round small #button *ngFor="let item of paragraph" (click)="skip(item.head)" [color]="item.head==0?'danger':'primary'"
+					 [attr.data-postag]="item.postag" [attr.data-head]="item.head" [attr.data-id]="item.id" [attr.data-deprel]="item.deprel">
 						{{item.word}}
 						<ion-badge color="danger">{{item.deprel}}</ion-badge>
 					</button>
@@ -25,10 +26,14 @@
 			</ion-scroll>
 		</ion-card-content>
 	</ion-card>
-	
-	<button ion-button (click)="prepareData()" full round>
-		<span *ngIf="!loading">发送</span>
-		<ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
-	</button>
-	
+	<ion-card [hidden]="!done">
+		<textarea class="form-control" id="editor" name="code" #te>{{c}}</textarea>
+	</ion-card>
+	<ion-fab>
+		<button ion-fab class="send" (click)="prepareData()">
+			<span *ngIf="!loading">发送</span>
+			<ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+		</button>
+	</ion-fab>
+
 </ion-content>

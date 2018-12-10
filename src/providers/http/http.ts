@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
 import { HTTP } from '@ionic-native/http';
 import { File } from '@ionic-native/file';
 import { RxjsProvider } from '../rxjs/rxjs'
-import { FileOpener } from '@ionic-native/file-opener';
 
 @Injectable()
 export class HttpProvider {
@@ -16,12 +15,11 @@ export class HttpProvider {
 	nodeUrl: string = "http://localhost:3000";
 	plt: string;
 	constructor(
-		public platform: Platform,
-		public http: HttpClient,
-		public mhttp: HTTP,
+		private platform: Platform,
+		private http: HttpClient,
+		private mhttp: HTTP,
 		private file: File,
-		public rxjs: RxjsProvider,
-		public fileOpener: FileOpener
+		private rxjs: RxjsProvider,
 	) { }
 	get(url) {
 		return this.mhttp.get(url, {}, {});
@@ -76,18 +74,6 @@ export class HttpProvider {
 
 	}
 	downloadFile(fileName) {
-		console.log(this.file.externalApplicationStorageDirectory);
-		var url = this.file.externalApplicationStorageDirectory + fileName;
-		this.mhttp.downloadFile(this.githubReleaseUrl, {}, {}, url).then(entry => {
-			console.log(entry.fullPath);
-			this.rxjs.sendMsg('下载完成，是否安装？', 'alert', () => {
-				this.fileOpener.open(url, 'application/vnd.android.package-archive')
-					.then(() => console.log('File is opened'))
-					.catch(e => console.log('Error opening file', e));
-			})
-		}).catch(response => {
-			console.error(response.error);
-		})
 	}
 
 }
