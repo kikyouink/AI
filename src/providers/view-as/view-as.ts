@@ -29,13 +29,12 @@ export class ViewAsProvider {
 
 	}
 	getFilterCard() {
-		// debugger;
 		var main = "", filter = [];
 		var card = this.sentence.getFilter('BA', 'n')[0];
-		var ATT = this.sentence.getChildren(card, 'ATT', 'n');
+		var ATT = this.sentence.getATT(card);
 		ATT.map((i) => {
 			var type = this.sentence.getType(i.word);
-			if (type == 'suit' || type == 'color') {
+			if (type == 'suit' || type == 'color' || type == 'type') {
 				var value = this.sentence.getTranslation(i.word);
 				filter.push({
 					type: type,
@@ -48,29 +47,29 @@ export class ViewAsProvider {
 			var [type, value] = [filter[j].type, filter[j].value];
 			main += `get.${type}(card)=='${value}'`;
 			if (j) main += `&&`;
+			else main += `;`;
 		}
-		main = `return ${main}`;
-		var filterCard = new Function("card", "player", main);
-		console.log('卡牌条件:');
-		console.log(filterCard);
-		this.list.filterCard = filterCard;
-		return filterCard;
+		if (main != '') {
+			var filterCard = new Function("card", "player", `return ${main}`);
+			console.log('卡牌条件:');
+			console.log(filterCard);
+			this.list.filterCard = filterCard;
+			return filterCard;
+		}
 	}
 	getSelectCard() {
-		var num = this.sentence.getDeprel('QUN')[0].word;
-		var num2 = this.sentence.getTranslation(num);
-		num2 = parseInt(num2);
+		var num = this.sentence.getDeprel('QUN')[0];
+		if (!num || this.sentence.getTranslation(num.word) < 2) return;
+		var num2 = this.sentence.getTranslation(num.word);
 		console.log('卡牌数量:');
 		console.log(num2);
-		if (num2 > 1) {
-			this.list.selectCard = num2;
-			return num2;
-		}
+		this.list.selectCard = num2;
+		return num2;
 	}
 	getPosition() {
 		var position;
 		var card = this.sentence.getFilter('BA', 'n')[0];
-		var ATT = this.sentence.getChildren(card, 'ATT', 'n');
+		var ATT = this.sentence.getATT(card);
 		ATT.map((i) => {
 			var type = this.sentence.getType(i.word);
 			if (type == 'position') {
@@ -98,8 +97,10 @@ export class ViewAsProvider {
 
 	}
 	getPrompt() {
-		var num=this.list['selectCard']?this.list['selectCard']:1;
-		var prompt = `将${num}张牌当做${this.list["viewAs"]}使用或者打出`;
+		var num = this.list['selectCard'] ? this.sentence.getTranslation(this.list['selectCard'], true) : 1;
+		var prompt = `将${num}张牌当做${this.sentence.getTranslation(this.list["viewAs"], true)}`;
+		if (typeof this.getWhen() == 'string') prompt += `使用`;
+		else prompt += `使用或打出`;
 		console.log('提示:');
 		console.log(prompt);
 		this.list.prompt = prompt;

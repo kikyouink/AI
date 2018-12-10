@@ -9,22 +9,20 @@ export class SentenceProvider {
 	typeList: object = {
 		suit: ['club', 'diamond', 'heart', 'spade'],
 		color: ['red', 'black'],
-		position: ['h', 'e', 'he'],
+		type: ['basic', 'equip', 'trick'],
+		position: ['h', 'e', 'he','j'],
 	}
 	replaceList: Array<any> = [
 		{
 			reg: '【[\u4e00-\u9fa5]+】',
-			replacement: '扑克',
+			replacement: 'CARD',
 		}, {
-			reg: '梅花|草花|方块|方片|红桃|黑桃',
-			replacement: '花色',
-		},{
-			reg: '一|二|三|四|五|六|七',
-			replacement: '两',
+			reg: '装备区|判定区',
+			replacement: '区域',
 		}
 	]
 	translationList: object = {
-		'一': '1',
+		'一': 1,
 		'两/二': 2,
 		'三': 3,
 		'四': 4,
@@ -41,25 +39,26 @@ export class SentenceProvider {
 		'方块/方片': 'diamond',
 		'红桃': 'heart',
 		'黑桃': 'spade',
+		'装备区': 'e',
+		'判定区': 'j',
+		'基本': 'basic',
+		'锦囊': 'trick',
+		'装备': 'equip',
 		'杀': 'sha',
 		'闪': 'shan',
 		'桃': 'tao',
-		'过河拆桥':'guohe',
-		'借刀杀人':'jiedao',
-		'决斗':'juedou',
-		'南蛮入侵':'nanman',
-		'顺手牵羊':'shunshou',
-		'桃园结义':'taoyuan',
+		'过河拆桥': 'guohe',
+		'借刀杀人': 'jiedao',
+		'决斗': 'juedou',
+		'南蛮入侵': 'nanman',
+		'顺手牵羊': 'shunshou',
+		'桃园结义': 'taoyuan',
 		'万箭齐发': 'wanjian',
-		'五谷丰登':'wugu',
-		'无懈可击':'wuxie',
-		'无中生有':'wuzhong',
-		'闪电':'shandian',
-		'装备': 'e',
-		'判定': 'j',
+		'五谷丰登': 'wugu',
+		'无懈可击': 'wuxie',
+		'无中生有': 'wuzhong',
+		'闪电': 'shandian',
 		'手': 'h',
-
-
 	}
 	constructor(
 		public rxjs: RxjsProvider,
@@ -72,10 +71,20 @@ export class SentenceProvider {
 			if (this.typeList[i].includes(w)) return i;
 		}
 	}
-	getTranslation(word) {
-		for (var i in this.translationList) {
-			if (i == word || (i.indexOf('/') != -1 && i.indexOf(word) != -1)) return this.translationList[i];
+	getTranslation(word, reverse = false) {
+		if (!reverse) {
+			for (var i in this.translationList) {
+				if (i == word || (i.indexOf('/') != -1 && i.indexOf(word) != -1)) return this.translationList[i];
+			}
+		} else {
+			for (var i in this.translationList) {
+				var ti = this.translationList[i];
+				if (ti == word || i.indexOf('/') != -1 && i.indexOf(word) != -1) {
+					return i.split('/')[0];
+				}
+			}
 		}
+
 		console.error(`没有找到【${word}】的翻译...`);
 		this.rxjs.sendMsg(`没有找到【${word}】的翻译...`);
 		return word;
@@ -85,7 +94,7 @@ export class SentenceProvider {
 			this.str += `${i}:`;
 			if (typeof obj[i] == "function") {
 				this.str += `${obj[i].toString()},\n`;
-				this.str = this.str.replace(/^"|$"|anonymous|[\r]|/g, '').replace(/\n\)/g,')')
+				this.str = this.str.replace(/^"|$"|anonymous|[\r]|/g, '').replace(/\n\)/g, ')');
 			}
 			else if (obj[i].constructor === Array) {
 				var arr = "";
@@ -104,12 +113,12 @@ export class SentenceProvider {
 			else this.str += `"${obj[i]}",\n`;
 		}
 		this.str += '}'
-		var s=this.str;
-		this.str='skill={\n';
+		var s = this.str;
+		this.str = 'skill={\n';
 		return s;
 	}
 	getReplace(msg) {
-		this.restoreList=[];
+		this.restoreList = [];
 		var newMsg = msg;
 		this.replaceList.map((i) => {
 			var before = newMsg.match(new RegExp(i.reg, 'g'));
@@ -119,7 +128,7 @@ export class SentenceProvider {
 					after: i.replacement,
 				})
 			}
-			newMsg = newMsg.replace(new RegExp(i.reg, 'g'), i.replacement );
+			newMsg = newMsg.replace(new RegExp(i.reg, 'g'), i.replacement);
 		})
 		console.log(this.restoreList);
 		return newMsg;
@@ -154,8 +163,8 @@ export class SentenceProvider {
 	getChildren(item, deprel?, postag?) {
 		var children = this.json.filter((i) => {
 			if (i.head != item.id) return false;
-			if (deprel && deprel != i.deprel) return false;
-			if (postag && postag != i.postag) return false;
+			if (deprel && i.deprel.indexOf(deprel) == -1) return false;
+			if (postag && i.postag.indexOf(postag) == -1) return false;
 			return true;
 		})
 		return children;
@@ -166,6 +175,31 @@ export class SentenceProvider {
 		})
 		return sibling;
 	}
+	getTrack(p,array) {
+		var parent=[];
+		if(p.constructor === Object) parent.push(p);
+		else parent=this.deepCopy(p);
+		parent.map((i) => {
+			console.log(i);
+			var children = this.getChildren(i, 'ATT', 'n');
+			if (children.length){
+				array.push(i);
+				this.getTrack(children,array);
+			}
+			else{
+				array.push(i);
+			}
+		})
+	}
+	getATT(item) {
+		var DE = this.getChildren(item, 'DE')[0];
+		if (DE) var SET = this.getChildren(DE, 'DE');
+		var arr = [];
+		var children=this.getChildren(item,'ATT','n');
+		this.getTrack(children,arr);
+		if (SET) this.getTrack(SET,arr);
+		return arr;
+	}
 	getDeprel(deprel, array = this.json) {
 		var result = array.filter((i) => {
 			return i.deprel == deprel;
@@ -174,9 +208,18 @@ export class SentenceProvider {
 	}
 	getFilter(deprel, postag) {
 		var filter = this.json.filter((i) => {
-			return i.deprel == deprel && i.postag == postag;
+			return i.deprel.indexOf(deprel) != -1 && i.postag.indexOf(postag) != -1;
 		})
 		return filter;
+	}
+	deepCopy(source, bool = true) {
+		var sourceCopy;
+		if (bool) sourceCopy = [];
+		else sourceCopy = {};
+		for (var item in source) {
+			sourceCopy[item] = typeof source[item] === 'object' ? this.deepCopy(source[item], false) : source[item];
+		}
+		return sourceCopy;
 	}
 
 }

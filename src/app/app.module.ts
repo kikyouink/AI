@@ -16,6 +16,8 @@ import { CodeProvider } from '../providers/code/code';
 import { ViewAsProvider } from '../providers/view-as/view-as';
 import { SentenceProvider } from '../providers/sentence/sentence';
 import { RxjsProvider } from '../providers/rxjs/rxjs';
+import { EnableProvider } from '../providers/enable/enable';
+import { TriggerProvider } from '../providers/trigger/trigger';
 
 @NgModule({
 	declarations: [
@@ -43,7 +45,9 @@ import { RxjsProvider } from '../providers/rxjs/rxjs';
 		HTTP,
 		File,
 		AppMinimize,
-		CodePush
+		CodePush,
+    EnableProvider,
+    TriggerProvider
 	]
 })
 export class AppModule { }

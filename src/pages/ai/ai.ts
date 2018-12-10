@@ -76,12 +76,12 @@ export class AiPage {
 			console.log(data);
 			if (data.msg.status && data.msg.status == 'done') {
 				this.done = true;
-				setTimeout(()=>{
+				setTimeout(() => {
 					this.c = this.sentence.getConversion(data.msg.code);
 					this.CodeMirrorEditor.setValue(this.c);
 					this.CodeMirrorEditor.refresh();
-				},200)
-				
+				}, 200)
+
 			}
 		})
 
@@ -92,7 +92,7 @@ export class AiPage {
 	prepareData() {
 		var firstLine = this.CodeMirrorEditor.firstLine();
 		var lastLine = this.CodeMirrorEditor.lastLine();
-		this.CodeMirrorEditor.replaceRange('', { line: firstLine, ch: 0 }, { line: lastLine, ch: 0 });
+		this.CodeMirrorEditor.replaceRange('', { line: firstLine, ch: 0 }, { line: lastLine });
 		this.plt = this.platform.is('android') ? 'm' : 'web';
 		this.loading = true;
 		this.canvas = this.canvasE.nativeElement;
@@ -112,7 +112,8 @@ export class AiPage {
 			if (this.plt == 'm') data = JSON.parse(res.data);
 			else data = res;
 			console.log(data);
-			var p = this.deepCopy(data["items"]);
+			var p = this.sentence.deepCopy(data["items"]);
+			this.paragraph = p;
 			this.paragraph = this.sentence.getRestore(p);
 			this.loading = false;
 			this.received = true;
@@ -147,15 +148,6 @@ export class AiPage {
 			return button.dataset.id == head;
 		});
 		return parent.length ? this.e(parent[0]) : null;
-	}
-	deepCopy(source, bool = true) {
-		var sourceCopy;
-		if (bool) sourceCopy = [];
-		else sourceCopy = {};
-		for (var item in source) {
-			sourceCopy[item] = typeof source[item] === 'object' ? this.deepCopy(source[item], false) : source[item];
-		}
-		return sourceCopy;
 	}
 
 }

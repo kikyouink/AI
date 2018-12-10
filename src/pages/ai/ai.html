@@ -13,7 +13,7 @@
 
 	<ion-card>
 		<ion-card-content>
-			<div class="text" contenteditable="true" text-center #text>你可以将一张方块手牌当【杀】使用或打出</div>
+			<div class="text" contenteditable="true" text-center #text>你可以将判定区的牌当【顺手牵羊】使用</div>
 			<ion-scroll scrollX="true" class="mix" #mix [hidden]="!received" [@fade]="received?'show':'hide'">
 				<canvas #canvas></canvas>
 				<div class="buttons" #btnBox>
@@ -26,8 +26,10 @@
 			</ion-scroll>
 		</ion-card-content>
 	</ion-card>
-	<ion-card [hidden]="!done">
-		<textarea class="form-control" id="editor" name="code" #te>{{c}}</textarea>
+	<ion-card [hidden]="!done" [@fade]="done?'show':'hide'">
+		<!-- <ion-scroll scrollX="true" > -->
+			<textarea class="form-control" id="editor" name="code" #te>{{c}}</textarea>
+		<!-- </ion-scroll> -->
 	</ion-card>
 	<ion-fab>
 		<button ion-fab class="send" (click)="prepareData()">

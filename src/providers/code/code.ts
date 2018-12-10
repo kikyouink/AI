@@ -1,12 +1,18 @@
 import { Injectable } from '@angular/core';
 import {ViewAsProvider} from '../view-as/view-as'
 import {SentenceProvider} from "../sentence/sentence"
-
+import { RxjsProvider } from "../../providers/rxjs/rxjs";
+import {EnableProvider} from "../../providers/enable/enable"
+import {TriggerProvider} from "../../providers/trigger/trigger"
 @Injectable()
 export class CodeProvider {
 	constructor(
 		public viewAs:ViewAsProvider,
+		public enable:EnableProvider,
+		public trigger:TriggerProvider,
 		public sentence:SentenceProvider,
+		public rxjs: RxjsProvider,
+
 	) {}
 
 	create(json) {
@@ -15,8 +21,8 @@ export class CodeProvider {
 		console.log(json);
 		switch (type) {
 			case "viewAs": this.viewAs.start(); break;
-			// case "enable": this.enable.compile(json); break;
-			// case "trigger": this.trigger.compile(json); break;
+			case "enable": this.enable.start(); break;
+			case "trigger": this.trigger.start(); break;
 			default: this.quit();
 		}
 	}
@@ -41,7 +47,8 @@ export class CodeProvider {
 		return false;
 	}
 	quit() {
-
+		this.rxjs.sendMsg('无法判断类型');
+		return ;
 	}
 
 
