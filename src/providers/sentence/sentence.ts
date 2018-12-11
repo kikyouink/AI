@@ -10,7 +10,7 @@ export class SentenceProvider {
 		suit: ['club', 'diamond', 'heart', 'spade'],
 		color: ['red', 'black'],
 		type: ['basic', 'equip', 'trick'],
-		position: ['h', 'e', 'he','j'],
+		position: ['h', 'e', 'he', 'j'],
 	}
 	replaceList: Array<any> = [
 		{
@@ -19,19 +19,35 @@ export class SentenceProvider {
 		}, {
 			reg: '装备区|判定区',
 			replacement: '区域',
-		},{
-			reg:'红桃|黑桃|方块|梅花',
-			replacement:'花色'
+		}, {
+			reg: '红桃|黑桃|方块|梅花',
+			replacement: '花色'
+		}, {
+			reg: '准备|判定|出牌|弃牌|结束',
+			replacement: '特定'
 		}
 	]
 	translationList: object = {
-		'一': 1,
+		'一/一张/一名': 1,
 		'两/二': 2,
 		'三': 3,
 		'四': 4,
 		'五': 5,
 		'六': 6,
 		'七': 7,
+		'准备': 'phaseBegin',
+		'出牌': 'phaseUse',
+		'判定': 'judge',
+		'弃牌': 'discard',
+		'结束': 'phaseEnd',
+		'你/你可以': 'player',
+		'其他': 'other',
+		'角色': 'target',
+		'摸': 'draw',
+		'弃置': 'discard',
+		'获得': 'gain',
+		'回复': 'recover',
+		'造成': 'damage',
 		'使用': 'chooseToUse',
 		'打出': 'chooseToRespond',
 		'和/与': '&&',
@@ -67,6 +83,7 @@ export class SentenceProvider {
 		public rxjs: RxjsProvider,
 	) { }
 	getType(word) {
+		if (!word) return null;
 		var w;
 		if (/[\u4e00-\u9fa5]+/.test(word)) w = this.getTranslation(word);
 		else w = word;
@@ -75,6 +92,9 @@ export class SentenceProvider {
 		}
 	}
 	getTranslation(word, reverse = false) {
+		if (!word) return null;
+		if (word.constructor == Object) word = word.word || word.name;
+		if (word.constructor == Array) word = word[0].word || word[0].name;
 		if (!reverse) {
 			for (var i in this.translationList) {
 				if (i == word || (i.indexOf('/') != -1 && i.indexOf(word) != -1)) return this.translationList[i];
@@ -93,8 +113,8 @@ export class SentenceProvider {
 		return word;
 	}
 	getConversion(obj) {
-		var str=this.str;
-		function track(obj){
+		var str = this.str;
+		function track(obj) {
 			for (var i in obj) {
 				str += `${i}:`;
 				if (typeof obj[i] == "function") {
@@ -120,7 +140,6 @@ export class SentenceProvider {
 		}
 		track(obj);
 		str += '}'
-		debugger;
 		var s = str;
 		str = 'skill={\n';
 		return s;
@@ -163,62 +182,89 @@ export class SentenceProvider {
 		return HED;
 	}
 	getParent(item) {
+		if (!item) return null;
+		if (item.constructor == Array) item = item[0];
 		var parent = this.json.filter((i) => {
 			return i.id == item.head;
 		})
 		return parent;
 	}
 	getChildren(item, deprel?, postag?) {
+		if (!item) return null;
+		if (item.constructor == Array) item = item[0];
 		var children = this.json.filter((i) => {
 			if (i.head != item.id) return false;
+			// var parent
 			if (deprel && i.deprel.indexOf(deprel) == -1) return false;
-			if (postag && i.postag.indexOf(postag) == -1) return false;
+			if (postag) {
+				if (postag.indexOf('/') != -1) {
+					var bool = false;
+					var p = postag.split('/');
+					p.map((j) => {
+						if (i.postag.indexOf(j) != -1) bool = true;
+					})
+					return bool;
+				}
+				return postag && i.postag.indexOf(postag) != -1;
+			}
 			return true;
 		})
-		return children;
+		return children.length ? children : null;
 	}
 	getSibling(item) {
-		var sibling = this.getChildren(item).filter((i) => {
+		if (!item) return null;
+		if (item.constructor == Array) item = item[0];
+		var sibling = this.getChildren(item);
+		if (sibling) sibling = sibling.filter((i) => {
 			return i.deprel == 'COO';
 		})
-		return sibling;
+		return sibling && sibling.length ? sibling : null;
 	}
-	getTrack(p,array) {
-		var parent=[];
-		if(p.constructor === Object) parent.push(p);
-		else parent=this.deepCopy(p);
+	getTrack(p, array) {
+		var parent = [];
+		if (p == null) parent = [];
+		else if (p.constructor === Object) parent.push(p);
+		else parent = this.deepCopy(p);
 		parent.map((i) => {
-			console.log(i);
 			var children = this.getChildren(i, 'ATT', 'n');
-			if (children.length){
+			if (children) {
 				array.push(i);
-				this.getTrack(children,array);
+				this.getTrack(children, array);
 			}
-			else{
+			else {
 				array.push(i);
 			}
 		})
 	}
-	getATT(item) {
-		var DE = this.getChildren(item, 'DE')[0];
-		if (DE) var SET = this.getChildren(DE, 'DE');
+	getATT(item,postag='n') {
+		if (!item) return null;
 		var arr = [];
-		var children=this.getChildren(item,'ATT','n');
-		this.getTrack(children,arr);
-		if (SET) this.getTrack(SET,arr);
-		return arr;
+		var DE = this.getChildren(item, 'DE');
+		var SET = this.getChildren(DE, 'DE');
+		var children = this.getChildren(item, 'ATT',postag);
+		this.getTrack(children, arr);
+		if (SET) this.getTrack(SET, arr);
+		return arr.length ? arr : null;
 	}
-	getDeprel(deprel, array = this.json) {
-		var result = array.filter((i) => {
-			return i.deprel == deprel;
+	getFilter(array, deprel, postag = "") {
+		if (array == null || array == undefined) return null;
+		if (array == '') array = this.json;
+		var filter = array.filter((i) => {
+			var bool = false;
+			if (i.deprel.indexOf(deprel) == -1) return false;
+			if (postag != "") {
+				if (postag.indexOf('/') != -1) {
+					var p = postag.split('/');
+					p.map((j) => {
+						if (i.postag.indexOf(j) != -1) bool = true;
+					})
+					return bool;
+				}
+				return i.postag.indexOf(postag) != -1;
+			}
+			return true;
 		})
-		return result;
-	}
-	getFilter(deprel, postag) {
-		var filter = this.json.filter((i) => {
-			return i.deprel.indexOf(deprel) != -1 && i.postag.indexOf(postag) != -1;
-		})
-		return filter;
+		return filter.length ? filter : null;
 	}
 	deepCopy(source, bool = true) {
 		var sourceCopy;

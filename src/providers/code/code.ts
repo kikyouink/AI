@@ -15,7 +15,7 @@ export class CodeProvider {
 
 	) {}
 
-	create(json) {
+	start(json) {
 		console.log('coding...');
 		var type = this.judgeType(json);
 		console.log(json);
@@ -33,14 +33,17 @@ export class CodeProvider {
 		return this.judgeViewAs(json)?"viewAs":this.judgeEnable(json)?"enable":this.judgeTrigger(json)?"trigger":this.quit();
 
 	}
-	judgeViewAs(json){
+	judgeViewAs(json){ 
 		var BA = json.some((i) => {
 			return i.deprel == "BA"
 		});
-		var HED = this.sentence.getHED()[0];
-		if (BA && HED.postag == 'v') return true;
+		var HED = this.sentence.getHED();
+		if (BA && HED[0].postag == 'v') return true;
 	}
 	judgeEnable(json){
+		var TMP=this.sentence.getFilter('','TMP','n'); 
+		var when=this.sentence.getChildren(TMP,'ATT','b');
+		if(this.sentence.getTranslation(when)=='phaseUse') return true;
 		return false;
 	}
 	judgeTrigger(json){

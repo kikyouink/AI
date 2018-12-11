@@ -132,7 +132,7 @@ export class AiPage {
 					this.painter.start(this.canvas, child, parent);
 				}
 			})
-			this.code.create(data);
+			this.code.start(data);
 		}, 100);
 
 	}

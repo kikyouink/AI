@@ -12,14 +12,14 @@ export class ViewAsProvider {
 
 	getWhen() {
 		var when;
-		var HED = this.sentence.getHED()[0];
-		var when1 = this.sentence.getChildren(HED, "VV")[0];
-		var when2 = this.sentence.getSibling(when1)[0];
-		if (!when2) when = this.sentence.getTranslation(when1.word);
+		var HED = this.sentence.getHED();
+		var when1 = this.sentence.getChildren(HED, "VV");
+		var when2 = this.sentence.getSibling(when1);
+		if (!when2) when = this.sentence.getTranslation(when1);
 		else {
 			var arr = [];
-			arr.push(this.sentence.getTranslation(when1.word));
-			arr.push(this.sentence.getTranslation(when2.word));
+			arr.push(this.sentence.getTranslation(when1));
+			arr.push(this.sentence.getTranslation(when2));
 			when = arr;
 		}
 		console.log('时机:');
@@ -30,12 +30,12 @@ export class ViewAsProvider {
 	}
 	getFilterCard() {
 		var main = "", filter = [];
-		var card = this.sentence.getFilter('BA', 'n')[0];
+		var card = this.sentence.getFilter('','BA', 'n');
 		var ATT = this.sentence.getATT(card);
-		ATT.map((i) => {
+		if(ATT) ATT.map((i) => {
 			var type = this.sentence.getType(i.word);
 			if (type == 'suit' || type == 'color' || type == 'type') {
-				var value = this.sentence.getTranslation(i.word);
+				var value = this.sentence.getTranslation(i);
 				filter.push({
 					type: type,
 					value: value
@@ -58,9 +58,9 @@ export class ViewAsProvider {
 		}
 	}
 	getSelectCard() {
-		var num = this.sentence.getDeprel('QUN')[0];
-		if (!num || this.sentence.getTranslation(num.word) < 2) return;
-		var num2 = this.sentence.getTranslation(num.word);
+		var num = this.sentence.getFilter('','QUN');
+		if (!num || this.sentence.getTranslation(num) < 2) return;
+		var num2 = this.sentence.getTranslation(num);
 		console.log('卡牌数量:');
 		console.log(num2);
 		this.list.selectCard = num2;
@@ -68,12 +68,12 @@ export class ViewAsProvider {
 	}
 	getPosition() {
 		var position;
-		var card = this.sentence.getFilter('BA', 'n')[0];
+		var card = this.sentence.getFilter('','BA', 'n');
 		var ATT = this.sentence.getATT(card);
-		ATT.map((i) => {
+		if(ATT) ATT.map((i) => {
 			var type = this.sentence.getType(i.word);
 			if (type == 'position') {
-				position = this.sentence.getTranslation(i.word);
+				position = this.sentence.getTranslation(i);
 			}
 		})
 		if (!position) position = "he";
@@ -84,7 +84,7 @@ export class ViewAsProvider {
 
 	}
 	getViewAs() {
-		var HED = this.sentence.getHED()[0];
+		var HED = this.sentence.getHED();
 		var viewAs = this.sentence.getChildren(HED, 'VOB')[0].word.replace(/【|】/g, '');
 		viewAs = this.sentence.getTranslation(viewAs);
 		var v = {
@@ -98,7 +98,7 @@ export class ViewAsProvider {
 	}
 	getPrompt() {
 		var num = this.list['selectCard'] ? this.sentence.getTranslation(this.list['selectCard'], true) : 1;
-		var prompt = `将${num}张牌当做${this.sentence.getTranslation(this.list["viewAs"].name, true)}`;
+		var prompt = `将${num}张牌当做${this.sentence.getTranslation(this.list["viewAs"], true)}`;
 		if (typeof this.getWhen() == 'string') prompt += `使用`;
 		else prompt += `使用或打出`;
 		console.log('提示:');
@@ -124,5 +124,4 @@ export class ViewAsProvider {
 		this.getPrompt();
 		this.compile();
 	}
-
 }
