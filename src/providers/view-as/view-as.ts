@@ -1,10 +1,16 @@
 import { Injectable } from '@angular/core';
 import { SentenceProvider } from "../sentence/sentence";
 import { RxjsProvider } from '../rxjs/rxjs';
-
 @Injectable()
 export class ViewAsProvider {
 	list: any = {};
+	promptList: any = {
+		when: [],
+		filterCard: [],
+		selectCard: [],
+		position:[],
+		viewAs: [],
+	};
 	constructor(
 		public sentence: SentenceProvider,
 		public rxjs: RxjsProvider,
@@ -15,26 +21,30 @@ export class ViewAsProvider {
 		var HED = this.sentence.getHED();
 		var when1 = this.sentence.getChildren(HED, "VV");
 		var when2 = this.sentence.getSibling(when1);
-		if (!when2) when = this.sentence.getTranslation(when1);
+		if (!when2) {
+			when = this.sentence.getTranslation(when1);
+			this.promptList.when.push(when1[0].word);
+		}
 		else {
 			var arr = [];
 			arr.push(this.sentence.getTranslation(when1));
 			arr.push(this.sentence.getTranslation(when2));
 			when = arr;
+			this.promptList.when.push(when1[0].word, when2[0].word);
 		}
-		console.log('时机:');
-		console.log(when);
 		this.list.enable = when;
+		console.table(this.promptList.when);
 		return when;
 
 	}
 	getFilterCard() {
 		var main = "", filter = [];
-		var card = this.sentence.getFilter('','BA', 'n');
+		var card = this.sentence.getFilter('', 'BA', 'n');
 		var ATT = this.sentence.getATT(card);
-		if(ATT) ATT.map((i) => {
+		if (ATT) ATT.map((i) => {
 			var type = this.sentence.getType(i.word);
 			if (type == 'suit' || type == 'color' || type == 'type') {
+				this.promptList.filterCard.push(i.word);
 				var value = this.sentence.getTranslation(i);
 				filter.push({
 					type: type,
@@ -51,77 +61,83 @@ export class ViewAsProvider {
 		}
 		if (main != '') {
 			var filterCard = new Function("card", "player", `return ${main}`);
-			console.log('卡牌条件:');
-			console.log(filterCard);
 			this.list.filterCard = filterCard;
+			console.table(this.promptList.filterCard);
 			return filterCard;
 		}
 	}
 	getSelectCard() {
-		var num = this.sentence.getFilter('','QUN');
+		var num = this.sentence.getFilter('', 'QUN');
+		this.promptList.selectCard.push(num[0].word);
 		if (!num || this.sentence.getTranslation(num) < 2) return;
 		var num2 = this.sentence.getTranslation(num);
-		console.log('卡牌数量:');
-		console.log(num2);
 		this.list.selectCard = num2;
+		console.table(this.promptList.selectCard);
 		return num2;
 	}
 	getPosition() {
 		var position;
-		var card = this.sentence.getFilter('','BA', 'n');
+		var card = this.sentence.getFilter('', 'BA', 'n');
 		var ATT = this.sentence.getATT(card);
-		if(ATT) ATT.map((i) => {
+		if (ATT) ATT.map((i) => {
 			var type = this.sentence.getType(i.word);
 			if (type == 'position') {
+				this.promptList.position.push(i.word);
 				position = this.sentence.getTranslation(i);
 			}
 		})
 		if (!position) position = "he";
-		console.log('卡牌区域:');
-		console.log(position);
 		this.list.position = position;
+		console.table(this.promptList.position);
 		return position;
 
 	}
 	getViewAs() {
 		var HED = this.sentence.getHED();
 		var viewAs = this.sentence.getChildren(HED, 'VOB')[0].word.replace(/【|】/g, '');
+		this.promptList.viewAs.push(viewAs);
 		viewAs = this.sentence.getTranslation(viewAs);
 		var v = {
 			name: viewAs
 		}
-		console.log('视为:');
-		console.log(viewAs);
 		this.list.viewAs = v;
+		console.table(this.promptList.viewAs);
 		return v;
 
 	}
 	getPrompt() {
-		var num = this.list['selectCard'] ? this.sentence.getTranslation(this.list['selectCard'], true) : 1;
-		var prompt = `将${num}张牌当做${this.sentence.getTranslation(this.list["viewAs"], true)}`;
-		if (typeof this.getWhen() == 'string') prompt += `使用`;
-		else prompt += `使用或打出`;
-		console.log('提示:');
-		console.log(prompt);
+		var selectCard=this.promptList.selectCard?this.promptList.selectCard:'一';
+		var filterCard=this.promptList.filterCard.join('');
+		var when=this.promptList.when.length<2?this.promptList.when[0]:this.promptList.when[0]+'或'+this.promptList.when[1];
+		var position=this.promptList.position.length?this.promptList.position[0]:'';
+		var viewAs=this.promptList.viewAs[0];
+		var prompt = `将${selectCard}张${filterCard}${position}牌当做${viewAs}${when}`;
 		this.list.prompt = prompt;
 		return prompt;
 	}
-	compile() {
+	clear() {
+		this.list = {};
+		for (var i in this.promptList) {
+			this.promptList[i] = [];
+		}
+	}
+	done() {
 		this.rxjs.sendMsg({
 			status: 'done',
 			code: this.list,
-		});
+			prompt:this.promptList,
+		})
 	}
 	//视为技
 	start() {
 		console.log('开始编写视为技');
-		this.list={};
+		this.clear();
 		this.getWhen();
 		this.getFilterCard();
 		this.getSelectCard()
 		this.getPosition();
 		this.getViewAs();
 		this.getPrompt();
-		this.compile();
+		this.done();
 	}
 }

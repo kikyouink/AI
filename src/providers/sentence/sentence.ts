@@ -3,7 +3,6 @@ import { RxjsProvider } from '../rxjs/rxjs'
 
 @Injectable()
 export class SentenceProvider {
-	str: string = 'skill={\n';
 	json: any;
 	restoreList = []
 	typeList: object = {
@@ -113,13 +112,13 @@ export class SentenceProvider {
 		return word;
 	}
 	getConversion(obj) {
-		var str = this.str;
+		var str = '';
 		function track(obj) {
 			for (var i in obj) {
 				str += `${i}:`;
 				if (typeof obj[i] == "function") {
-					str += `${obj[i].toString()},\n`;
-					str = str.replace(/^"|$"|anonymous|[\r]|/g, '').replace(/\n\)/g, ')');
+					str += `${obj[i].toString()},`;
+					str = str.replace(/^"|"$|anonymous|[\r]|\/\*``\*\//g, '').replace(/\n\)/g, ')');
 				}
 				else if (obj[i].constructor === Array) {
 					var arr = "";
@@ -127,22 +126,52 @@ export class SentenceProvider {
 						arr += `"${j}",`;
 					})
 					arr = arr.substr(0, arr.length - 1);
-					str += `[${arr}],\n`;
+					str += `[${arr}],`;
 				} else if (obj[i].constructor === Object) {
-					str += '{\n';
+					str += '{';
 					track(obj[i]);
-					str += '},\n'
+					str += '},'
 				} else if (typeof obj[i] == "number") {
-					str += `${obj[i]},\n`;
+					str += `${obj[i]},`;
 				}
-				else str += `"${obj[i]}",\n`;
+				else str += `"${obj[i]}",`;
 			}
 		}
 		track(obj);
-		str += '}'
-		var s = str;
-		str = 'skill={\n';
-		return s;
+		// str += '';
+		console.log(str);
+		
+		var format = this.getFormat(str);
+		return format;
+	}
+	getFormat(str) {
+		var num = 0;
+		function space(n) {
+			var s = '';
+			while (n--) {
+				s += '	';
+			}
+			return s;
+		}
+		// var str="skill={a:1,b:function(card,player){l(1);l(2);},name:{view:2,},c:(target,sdf)}";
+		str = str.replace(/\{/g, '{\n').replace(/\,}/g, ',\n}').replace(/,\b/g, ',\n')
+			.replace(/;/g, ';\n').replace(/\([^\)]+,[^\)]+\)/g, function (word) {
+				return word.replace(/,\n/g, ',');
+			})
+		console.log(str.match(/(.+\n){1}/g));
+		var arr = str.match(/(.+\n){1}/g);
+		var n = '';
+		arr.map((i, index, a) => {
+			var length = i.length;
+			if (i.substr(length - 2, 1) == "{") {
+				num++;
+			}
+			else if (index < a.length - 1 && a[index + 1].indexOf('}') != -1) {
+				num--;
+			}
+			n += i + `${space(num)}`;
+		})
+		return n;
 	}
 	getReplace(msg) {
 		this.restoreList = [];
@@ -236,12 +265,12 @@ export class SentenceProvider {
 			}
 		})
 	}
-	getATT(item,postag='n') {
+	getATT(item, postag = 'n') {
 		if (!item) return null;
 		var arr = [];
 		var DE = this.getChildren(item, 'DE');
 		var SET = this.getChildren(DE, 'DE');
-		var children = this.getChildren(item, 'ATT',postag);
+		var children = this.getChildren(item, 'ATT', postag);
 		this.getTrack(children, arr);
 		if (SET) this.getTrack(SET, arr);
 		return arr.length ? arr : null;

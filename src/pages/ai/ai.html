@@ -13,7 +13,7 @@
 
 	<ion-card>
 		<ion-card-content>
-			<div class="text" contenteditable="true" text-center #text>出牌阶段，你可以对一名其他角色造成一点伤害</div>
+			<div class="text" contenteditable="true" text-center #text>你可以将一张红色牌当【杀】使用</div>
 			<ion-scroll scrollX="true" class="mix" #mix [hidden]="!received" [@fade]="received?'show':'hide'">
 				<canvas #canvas></canvas>
 				<div class="buttons" #btnBox>
@@ -25,11 +25,6 @@
 				</div>
 			</ion-scroll>
 		</ion-card-content>
-	</ion-card>
-	<ion-card [hidden]="!done" [@fade]="done?'show':'hide'">
-		<!-- <ion-scroll scrollX="true" > -->
-			<textarea class="form-control" id="editor" name="code" #te>{{c}}</textarea>
-		<!-- </ion-scroll> -->
 	</ion-card>
 	<ion-fab>
 		<button ion-fab class="send" (click)="prepareData()">

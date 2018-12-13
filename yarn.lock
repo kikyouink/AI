@@ -965,11 +965,6 @@ code-push@2.0.6:
     superagent-proxy "^1.0.3"
     yazl "^2.4.1"
 
-codemirror@^5.42.0:
-  version "5.42.0"
-  resolved "http://registry.npm.taobao.org/codemirror/download/codemirror-5.42.0.tgz#2d5b640ed009e89dee9ed8a2a778e2a25b65f9eb"
-  integrity sha1-LVtkDtAJ6J3untiip3jioltl+es=
-
 collection-visit@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/collection-visit/download/collection-visit-1.0.0.tgz#4bc0373c164bc3291b4d368c829cf1a80a59dca0"
@@ -1495,6 +1490,11 @@ ecc-jsbn@~0.1.1:
   dependencies:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
+
+editor.md@^1.5.0:
+  version "1.5.0"
+  resolved "http://registry.npm.taobao.org/editor.md/download/editor.md-1.5.0.tgz#6fe636a88a39b85613f53eee6ecb7b7348ab23bf"
+  integrity sha1-b+Y2qIo5uFYT9T7ubst7c0irI78=
 
 ee-first@1.1.1:
   version "1.1.1"

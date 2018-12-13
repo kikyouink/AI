@@ -1,0 +1,41 @@
+page-markdown {
+	
+	ion-header{
+		box-shadow: none;
+		transition: 0.75s all;
+		background: none ;
+		&::after{
+			height: 0 !important;
+		}
+		.toolbar-background{
+			background: initial !important;
+			box-shadow: none;
+		}
+		&.opaque{
+			background: $primary !important;
+			&::after{
+				height: 5px !important;
+			}
+			.toolbar-background{
+				background:$primary ;
+			}
+		}
+	}
+	.scroll-content{
+		margin-top: 0 !important;
+	}
+	.pic{
+		background: url(../../assets/imgs/white.png);
+		background-size: cover;
+		height: 15rem;
+	}
+	.editormd-html-preview, .editormd-preview-container{
+		padding: 15px;
+	}
+	.pln{
+		color:#222e58
+	}
+	// li.L1,li.L3,li.L5,li.L7,li.L9{
+	// 	background: none;
+	// }
+}

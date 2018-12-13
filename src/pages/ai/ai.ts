@@ -6,8 +6,7 @@ import { HttpProvider } from "../../providers/http/http";
 import { CodeProvider } from "../../providers/code/code";
 import { SentenceProvider } from "../../providers/sentence/sentence"
 import { RxjsProvider } from "../../providers/rxjs/rxjs";
-import * as CodeMirror from 'codemirror/lib/codemirror'
-import 'codemirror/mode/javascript/javascript'
+
 @IonicPage()
 @Component({
 	selector: 'page-ai',
@@ -40,7 +39,6 @@ export class AiPage {
 	done: boolean = false;
 	c: string;
 	paragraph: any;
-	CodeMirrorEditor: any;
 	plt: string;
 	config = {
 		mode: {
@@ -64,24 +62,18 @@ export class AiPage {
 		public rxjs: RxjsProvider,
 	) { }
 	ionViewDidLoad() {
-		let myTextarea = this.te.nativeElement;
-		this.CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
-			mode: 'javascript',//编辑器语言
-			theme: 'mdn-like',
-			json: true,
-			extraKeys: { "Ctrl": "autocomplete" },//ctrl可以弹出选择项 
-			smartIndent: true,
-		});
 		this.rxjs.getMsg().subscribe(data => {
 			console.log(data);
 			if (data.msg.status && data.msg.status == 'done') {
 				this.done = true;
-				setTimeout(() => {
-					this.c = this.sentence.getConversion(data.msg.code);
-					this.CodeMirrorEditor.setValue(this.c);
-					this.CodeMirrorEditor.refresh();
-				}, 200)
-
+				let code = this.sentence.getConversion(data.msg.code);
+				code = '```javascript\n' + code + '\n```\n'
+				console.log(code);
+				this.navCtrl.push('MarkdownPage', {
+					title: '转换结果',
+					prompt:data.msg.prompt,
+					code: code,
+				})
 			}
 		})
 
@@ -90,9 +82,6 @@ export class AiPage {
 		return i._elementRef.nativeElement;
 	}
 	prepareData() {
-		var firstLine = this.CodeMirrorEditor.firstLine();
-		var lastLine = this.CodeMirrorEditor.lastLine();
-		this.CodeMirrorEditor.replaceRange('', { line: firstLine, ch: 0 }, { line: lastLine });
 		this.plt = this.platform.is('android') ? 'm' : 'web';
 		this.loading = true;
 		this.canvas = this.canvasE.nativeElement;

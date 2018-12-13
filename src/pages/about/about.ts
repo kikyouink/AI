@@ -1,27 +1,25 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
+/**
+ * Generated class for the AboutPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
 
 @IonicPage()
 @Component({
-	selector: 'page-about',
-	templateUrl: 'about.html',
+  selector: 'page-about',
+  templateUrl: 'about.html',
 })
 export class AboutPage {
-	hide: boolean = true;
-	constructor(
-		public navCtrl: NavController,
-		public navParams: NavParams,
-		public ref: ChangeDetectorRef,
-	) {
-	}
 
-	ionViewDidLoad() {
-		console.log('ionViewDidLoad AboutPage');
-	}
-	scrollHandler(event) {
-		if (event.scrollTop > 100 && this.hide == true) this.hide = false;
-		else if (event.scrollTop <= 100 && this.hide == false) this.hide = true;
-		this.ref.detectChanges();
-	}
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad AboutPage');
+  }
 
 }
