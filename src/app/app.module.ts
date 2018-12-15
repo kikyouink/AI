@@ -8,6 +8,7 @@ import { HTTP } from '@ionic-native/http';
 import { File } from '@ionic-native/file';
 import { AppMinimize } from '@ionic-native/app-minimize';
 import { CodePush } from '@ionic-native/code-push';
+import { Clipboard } from '@ionic-native/clipboard';
 
 import { MyApp } from './app.component';
 import { PainterProvider } from '../providers/painter/painter';
@@ -18,6 +19,7 @@ import { SentenceProvider } from '../providers/sentence/sentence';
 import { RxjsProvider } from '../providers/rxjs/rxjs';
 import { EnableProvider } from '../providers/enable/enable';
 import { TriggerProvider } from '../providers/trigger/trigger';
+import {PipesModule} from '../pipes/pipes.module';
 
 @NgModule({
 	declarations: [
@@ -46,8 +48,9 @@ import { TriggerProvider } from '../providers/trigger/trigger';
 		File,
 		AppMinimize,
 		CodePush,
-    EnableProvider,
-    TriggerProvider
+		Clipboard,
+		EnableProvider,
+		TriggerProvider
 	]
 })
 export class AppModule { }

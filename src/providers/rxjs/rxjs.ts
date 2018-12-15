@@ -28,20 +28,17 @@ export class RxjsProvider {
 	getMsg(): Observable<any> {
 		return this.subject.asObservable();
 	}
-	// listening() {
-	// 	this.subject.subscribe(data => {
-	// 		console.log('listen');
-			
-	// 		console.log(data);
-			
-	// 		if (data.type == "toast") {
-	// 			this.presentToast(data.msg);
-	// 		}
-	// 		else if (data.type == "alert") {
-	// 			this.showConfirm(data.msg, data.callback);
-	// 		}
-	// 	})
-	// }
+	listening() {
+		this.getMsg().subscribe(data => {
+			console.log(data);
+			if (data.type == "toast") {
+				this.presentToast(data.msg);
+			}
+			else if (data.type == "alert") {
+				this.showConfirm(data.msg, data.callback);
+			}
+		})
+	}
 	presentToast(message) {
 		const toast = this.toastCtrl.create({
 			message: message,

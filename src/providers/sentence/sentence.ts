@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { RxjsProvider } from '../rxjs/rxjs'
+// import { RxjsProvider } from '../rxjs/rxjs';
 
 @Injectable()
 export class SentenceProvider {
@@ -79,7 +79,7 @@ export class SentenceProvider {
 		'手': 'h',
 	}
 	constructor(
-		public rxjs: RxjsProvider,
+		// public rxjs: RxjsProvider,
 	) { }
 	getType(word) {
 		if (!word) return null;
@@ -108,7 +108,6 @@ export class SentenceProvider {
 		}
 
 		console.error(`没有找到【${word}】的翻译...`);
-		this.rxjs.sendMsg(`没有找到【${word}】的翻译...`);
 		return word;
 	}
 	getConversion(obj) {
@@ -118,7 +117,7 @@ export class SentenceProvider {
 				str += `${i}:`;
 				if (typeof obj[i] == "function") {
 					str += `${obj[i].toString()},`;
-					str = str.replace(/^"|"$|anonymous|[\r]|\/\*``\*\//g, '').replace(/\n\)/g, ')');
+					str = str.replace(/^"|"$|anonymous|[\r]|\/\*\S+\*\//g, '').replace(/\n\)/g, ')');
 				}
 				else if (obj[i].constructor === Array) {
 					var arr = "";
@@ -153,12 +152,11 @@ export class SentenceProvider {
 			}
 			return s;
 		}
-		// var str="skill={a:1,b:function(card,player){l(1);l(2);},name:{view:2,},c:(target,sdf)}";
-		str = str.replace(/\{/g, '{\n').replace(/\,}/g, ',\n}').replace(/,\b/g, ',\n')
-			.replace(/;/g, ';\n').replace(/\([^\)]+,[^\)]+\)/g, function (word) {
+		str = str.replace(/\{/g, '{\n').replace(/\,}/g, ',\n}')
+				.replace(/,\b/g, ',\n').replace(/;/g, ';\n')
+				.replace(/\([^\)]+,[^\)]+\)/g, function (word) {
 				return word.replace(/,\n/g, ',');
 			})
-		console.log(str.match(/(.+\n){1}/g));
 		var arr = str.match(/(.+\n){1}/g);
 		var n = '';
 		arr.map((i, index, a) => {

@@ -83,6 +83,11 @@
   resolved "http://registry.npm.taobao.org/@ionic-native/app-minimize/download/@ionic-native/app-minimize-4.18.0.tgz#27912166d5c1852c1a4111315219942e876e330f"
   integrity sha1-J5EhZtXBhSwaQRExUhmULoduMw8=
 
+"@ionic-native/clipboard@^4.18.0":
+  version "4.18.0"
+  resolved "http://registry.npm.taobao.org/@ionic-native/clipboard/download/@ionic-native/clipboard-4.18.0.tgz#7e0d6a5b84981aebb1ceba6fe0ee01a76c8295f5"
+  integrity sha1-fg1qW4SYGuuxzrpv4O4Bp2yClfU=
+
 "@ionic-native/code-push@^4.18.0":
   version "4.18.0"
   resolved "http://registry.npm.taobao.org/@ionic-native/code-push/download/@ionic-native/code-push-4.18.0.tgz#00d5e990e5ad9f4aabaab89dff6b969506001501"
@@ -1115,6 +1120,11 @@ cordova-android@7.1.4:
     shelljs "0.5.3"
     xmlbuilder "8.2.2"
 
+cordova-clipboard@1.2.1:
+  version "1.2.1"
+  resolved "http://registry.npm.taobao.org/cordova-clipboard/download/cordova-clipboard-1.2.1.tgz#130624356583f749abed23b380724e1d273051c8"
+  integrity sha1-EwYkNWWD90mr7SOzgHJOHScwUcg=
+
 cordova-common@2.2.5:
   version "2.2.5"
   resolved "http://registry.npm.taobao.org/cordova-common/download/cordova-common-2.2.5.tgz#f93cef2ad494cfcbf56c46e3d612aaa9cb5fcc32"
@@ -1156,11 +1166,6 @@ cordova-plugin-dialogs@2.0.1:
   version "2.0.1"
   resolved "http://registry.npm.taobao.org/cordova-plugin-dialogs/download/cordova-plugin-dialogs-2.0.1.tgz#37fef1512596c8d5df9543fb78724590f767dcf3"
   integrity sha1-N/7xUSWWyNXflUP7eHJFkPdn3PM=
-
-cordova-plugin-file-opener2@2.0.19:
-  version "2.0.19"
-  resolved "http://registry.npm.taobao.org/cordova-plugin-file-opener2/download/cordova-plugin-file-opener2-2.0.19.tgz#ca3ae1225395b77ab1fe5b20accbfecc688e2493"
-  integrity sha1-yjrhIlOVt3qx/lsgrMv+zGiOJJM=
 
 cordova-plugin-file-transfer@^1.7.1:
   version "1.7.1"

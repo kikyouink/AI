@@ -1,41 +1,72 @@
 page-markdown {
-	
-	ion-header{
-		box-shadow: none;
-		transition: 0.75s all;
-		background: none ;
-		&::after{
-			height: 0 !important;
-		}
-		.toolbar-background{
-			background: initial !important;
-			box-shadow: none;
-		}
-		&.opaque{
-			background: $primary !important;
-			&::after{
-				height: 5px !important;
-			}
-			.toolbar-background{
-				background:$primary ;
-			}
-		}
-	}
-	.scroll-content{
-		margin-top: 0 !important;
-	}
-	.pic{
-		background: url(../../assets/imgs/white.png);
-		background-size: cover;
-		height: 15rem;
-	}
-	.editormd-html-preview, .editormd-preview-container{
-		padding: 15px;
-	}
-	.pln{
-		color:#222e58
-	}
-	// li.L1,li.L3,li.L5,li.L7,li.L9{
-	// 	background: none;
-	// }
+    ion-header {
+        box-shadow: none;
+        transition: 0.75s all;
+        background: none;
+        text-shadow: 0 0 5px black;
+        &::after {
+            height: 0 !important;
+        }
+        .toolbar-background {
+            background: initial !important;
+            box-shadow: none;
+        }
+        &.opaque {
+            background: $primary !important;
+            &::after {
+                height: 5px !important;
+            }
+            .toolbar-background {
+                background: $primary;
+            }
+            text-shadow: none;
+        }
+    }
+    .scroll-content {
+        margin-top: 0 !important;
+    }
+    .structure {
+        height: fit-content;
+        background: aliceblue;
+        .mix {
+            position: relative;
+            overflow: scroll hidden;
+            height: 160px;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .buttons {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            width: fit-content;
+            height: 100%;
+            overflow: auto;
+        }
+    }
+    .pic {
+        background: url(../../assets/imgs/bg/markdown.png);
+        background-size: cover;
+        height: 18rem;
+        position: relative;
+    }
+    ion-fab {
+        bottom: 3rem;
+        right: 3rem;
+        .toggle {
+            background: $twitter !important;
+        }
+    }
+    .editormd-html-preview,
+    .editormd-preview-container {
+        padding: 15px;
+    }
+    .pln {
+        color: #222e58;
+    } // li.L1,li.L3,li.L5,li.L7,li.L9{
+    // 	background: none;
+    // }
 }

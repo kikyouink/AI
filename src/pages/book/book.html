@@ -10,6 +10,15 @@
 </ion-header>
 
 
-<ion-content padding>
-
+<ion-content>
+	<ion-list>
+		<button ion-item *ngFor="let book of bookList" (click)="moveTo('MarkdownPage',book)">
+			<ion-avatar item-start>
+				<img [src]="book.avatar|url">
+			</ion-avatar>
+			<h3>Form@{{book.author}}</h3>
+			<h2>{{book.title}}</h2>
+			<p>{{book.content|markdown}}</p>
+		</button>
+	</ion-list>
 </ion-content>

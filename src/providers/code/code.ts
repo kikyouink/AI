@@ -16,9 +16,11 @@ export class CodeProvider {
 	) {}
 
 	start(json) {
-		console.log('coding...');
-		var type = this.judgeType(json);
-		console.log(json);
+        console.log('coding...');
+        console.log(json);
+        this.sentence.receiveJson(json);
+        var type = this.judgeType(json);
+        console.log( this.sentence.json);
 		switch (type) {
 			case "viewAs": this.viewAs.start(); break;
 			case "enable": this.enable.start(); break;
@@ -33,7 +35,7 @@ export class CodeProvider {
 		return this.judgeViewAs(json)?"viewAs":this.judgeEnable(json)?"enable":this.judgeTrigger(json)?"trigger":this.quit();
 
 	}
-	judgeViewAs(json){ 
+	judgeViewAs(json){  
 		var BA = json.some((i) => {
 			return i.deprel == "BA"
 		});

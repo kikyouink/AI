@@ -14,16 +14,6 @@
 	<ion-card>
 		<ion-card-content>
 			<div class="text" contenteditable="true" text-center #text>你可以将一张红色牌当【杀】使用</div>
-			<ion-scroll scrollX="true" class="mix" #mix [hidden]="!received" [@fade]="received?'show':'hide'">
-				<canvas #canvas></canvas>
-				<div class="buttons" #btnBox>
-					<button ion-button round small #button *ngFor="let item of paragraph" (click)="skip(item.head)" [color]="item.head==0?'danger':'primary'"
-					 [attr.data-postag]="item.postag" [attr.data-head]="item.head" [attr.data-id]="item.id" [attr.data-deprel]="item.deprel">
-						{{item.word}}
-						<ion-badge color="danger">{{item.deprel}}</ion-badge>
-					</button>
-				</div>
-			</ion-scroll>
 		</ion-card-content>
 	</ion-card>
 	<ion-fab>

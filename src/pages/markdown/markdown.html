@@ -1,15 +1,37 @@
 <ion-header [class.opaque]="!hide">
 
-	<ion-navbar>
-		<ion-title>{{title}}</ion-title>
-	</ion-navbar>
+    <ion-navbar>
+        <ion-title>{{title}}</ion-title>
+    </ion-navbar>
 
 </ion-header>
 <ion-content (ionScroll)="scrollHandler($event)">
-	<div class="pic"></div>
-	<div>
-		<div id="editormd">
-			<textarea style="display: none"[(ngModel)]="text"></textarea>
-		</div>
-	</div>
+    <div class="pic">
+        <ion-avatar class="avatar markdown">
+            <img [src]="avatar|url">
+        </ion-avatar>
+        <div class="sign">{{author}}</div>
+    </div>
+    <div class="structure" *ngIf="structure" [@fade]="abb?'show':'hide'">
+        <ion-scroll scrollX="true" class="mix" #mix>
+            <canvas #canvas></canvas>
+            <div class="buttons" #btnBox>
+                <button ion-button round small #button *ngFor="let item of paragraph" (click)="jumpTo(item.head)"
+                    [color]="item.head==0?'danger':'twitter'" [attr.data-postag]="item.postag" [attr.data-head]="item.head"
+                    [attr.data-id]="item.id" [attr.data-deprel]="item.deprel">
+                    {{item.word}}
+                    <ion-badge color="danger">{{item.deprel}}</ion-badge>
+                </button>
+            </div>
+        </ion-scroll>
+    </div>
+
+    <div id="editormd" [@slide]="abb?'down':'up'">
+        <textarea style="display: none" [(ngModel)]="text"></textarea>
+    </div>
+    <ion-fab *ngIf="structure">
+        <button ion-fab class="toggle" (click)="abb=!abb">
+            发送
+        </button>
+    </ion-fab>
 </ion-content>

@@ -1,79 +1,95 @@
-ion-header{
-	background:$primary ;
-	padding-top: 20px;
-	.toolbar-background{
-		background:$primary ;
-	}
-	.toolbar-title,.back-button-icon{
-		color: white
-	}
+ion-header {
+    background: $primary;
+    padding-top: 2.5rem;
+    .toolbar-background {
+        background: $primary;
+    }
+    .toolbar-title,
+    .back-button-icon {
+        color: white;
+    }
 }
-button{
-	&.bar-button{
-		color:white !important;
-	}
-	&.item{
-		color:#222e58;
-	}
-}
-ion-card{
-	color:#145c77 !important;
-	.card-header-md{
-		color:gray !important;
-	}
-}
-ion-spinner * {
-	stroke: white !important;
-}
-ion-badge{
-	background: $twitter !important;
-	border-radius: 10px !important;
-	padding: 3px 5px !important;
-}
-ion-avatar{
-	width: 7rem;
-	border-radius: 50%;
-	background-size: cover;
-	position: absolute;
-	top:calc(50% - 3.5rem);
-	left: 2rem;
-	overflow: hidden;
-	z-index: 5;
-	box-shadow: 0 0 5px;
 
+button {
+    &.bar-button {
+        color: white !important;
+    }
+    &.item {
+        color: #222e58;
+    }
 }
-.sign{
-	color: whitesmoke;
-	text-shadow: 0 0 5px black;
-	position: absolute;
-	bottom: 1rem;
-	left: 2rem;
+
+ion-card {
+    color: #145c77 !important;
+    .card-header-md {
+        color: gray !important;
+    }
 }
-.scroll-content{
-	overflow: auto;
+
+ion-spinner * {
+    stroke: white !important;
 }
-.bg{
-	height: 15rem;
-	position: relative;
-	overflow:hidden;
+
+ion-badge {
+    background: #2a4c88 !important;
+    border-radius: 10px !important;
+    padding: 3px 5px !important;
 }
-.bg::before{
-	content: "";
+
+.avatar {
+    width: 7rem;
+    border-radius: 50%;
+    background-size: cover;
     position: absolute;
-    filter:blur(.7rem);
+    left: 2rem;
+    z-index: 5;
+    box-shadow: 0 0 5px;
+    overflow: hidden;
+    &.slide {
+        top: calc(50% - 3.5rem);
+    }
+    &.markdown {
+        top: 8rem;
+    }
+}
+
+.sign {
+    color: whitesmoke;
+    text-shadow: 0 0 5px black;
+    position: absolute;
+    bottom: 1rem;
+    left: 2rem;
+}
+
+.scroll-content {
+    overflow: auto;
+}
+
+.bg {
+    height: 15rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.bg::before {
+    content: "";
+    position: absolute;
+    filter: blur(0.7rem);
     z-index: -1;
-    background:url('../assets/imgs/bg.png') no-repeat;
+    background: url("../assets/imgs/bg/slide.png") no-repeat;
     width: 120%;
     height: 120%;
-    top:- 10px;
+    top: -10px;
     left: -10px;
     background-size: cover;
-    overflow:hidden;
+    overflow: hidden;
 }
+
 ::-webkit-scrollbar {
-	display: none;
+    display: none;
 }
-.scroll-zoom-wrapper{
-	height: 100%;
-	position: relative;
+
+.scroll-zoom-wrapper {
+    height: 100%;
+    position: relative;
 }
