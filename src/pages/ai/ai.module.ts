@@ -3,11 +3,11 @@ import { IonicPageModule } from 'ionic-angular';
 import { AiPage } from './ai';
 
 @NgModule({
-  declarations: [
-    AiPage,
-  ],
-  imports: [
-    IonicPageModule.forChild(AiPage),
-  ],
+    declarations: [
+        AiPage,
+    ],
+    imports: [
+        IonicPageModule.forChild(AiPage),
+    ],
 })
-export class AiPageModule {}
+export class AiPageModule { }
